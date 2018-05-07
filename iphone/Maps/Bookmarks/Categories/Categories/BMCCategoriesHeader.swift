@@ -18,6 +18,7 @@ final class BMCCategoriesHeader: UIView {
   }
 
   var isShowAll = false {
+    
     didSet {
       let title = L(isShowAll ? "bookmarks_groups_show_all" : "bookmarks_groups_hide_all")
       button.setTitle(title, for: .normal)
