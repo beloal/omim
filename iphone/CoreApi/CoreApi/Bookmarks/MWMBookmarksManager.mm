@@ -768,4 +768,9 @@
   return [result copy];
 }
 
+- (void)setElevationActivePoint:(double)distance trackId:(uint64_t)trackId {
+  self.bm.SetElevationActivePoint(trackId, distance);
+}
+
+
 @end

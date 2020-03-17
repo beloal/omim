@@ -240,4 +240,8 @@ extension PlacePageInteractor: ElevationProfileViewControllerDelegate {
   func openDifficultyPopup() {
     MWMPlacePageManagerHelper.openElevationDifficultPopup(placePageData)
   }
+
+  func updateMapPoint(_ distance: Double) {
+    MWMBookmarksManager.shared().setElevationActivePoint(distance, trackId: placePageData.elevationProfileData!.trackId)
+  }
 }

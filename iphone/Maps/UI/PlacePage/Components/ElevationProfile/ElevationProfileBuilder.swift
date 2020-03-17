@@ -6,8 +6,8 @@ class ElevationProfileBuilder {
     let storyboard = UIStoryboard.instance(.placePage)
     let viewController = storyboard.instantiateViewController(ofType: ElevationProfileViewController.self);
     let presenter = ElevationProfilePresenter(view: viewController,
-                                          data: elevationProfileData,
-                                          delegate: delegate)
+                                              data: elevationProfileData,
+                                              delegate: delegate)
     
     viewController.presenter = presenter
 
