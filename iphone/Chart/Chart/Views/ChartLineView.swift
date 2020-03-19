@@ -27,7 +27,7 @@ class ChartLineView: UIView {
         shapeLayer.strokeColor = chartLine.color.cgColor
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.lineJoin = .round
-      case .bar, .area, .lineArea:
+      case .lineArea:
         shapeLayer.strokeColor = UIColor.clear.cgColor
         shapeLayer.fillColor = chartLine.color.cgColor
       }

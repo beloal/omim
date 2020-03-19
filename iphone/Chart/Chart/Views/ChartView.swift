@@ -16,8 +16,7 @@ enum ChartAnimation: TimeInterval {
 public class ChartView: UIView {
   let chartsContainerView = UIView()
   let chartPreviewView = ChartPreviewView()
-  let yAxisLeftView = ChartYAxisView()
-  var yAxisRightView = ChartYAxisView()
+  let yAxisView = ChartYAxisView()
   let xAxisView = ChartXAxisView()
   let chartInfoView = ChartInfoView()
   var lineViews: [ChartLineView] = []
@@ -32,13 +31,13 @@ public class ChartView: UIView {
   private var pinchStartUpper = 0
   private var pinchGR: UIPinchGestureRecognizer!
 
-  public var previewSelectorColor: UIColor = UIColor.white {
+  public var previewSelectorColor: UIColor = UIColor.lightGray.withAlphaComponent(0.9) {
     didSet {
       chartPreviewView.selectorColor = previewSelectorColor
     }
   }
 
-  public var previewTintColor: UIColor = UIColor.clear {
+  public var previewTintColor: UIColor = UIColor.lightGray.withAlphaComponent(0.5) {
     didSet {
       chartPreviewView.selectorTintColor = previewTintColor
     }
@@ -53,13 +52,13 @@ public class ChartView: UIView {
   public var gridTextColor: UIColor = UIColor(white: 0, alpha: 0.2) {
     didSet {
       xAxisView.gridColor = gridTextColor
-      yAxisLeftView.gridColor = gridTextColor
+      yAxisView.gridColor = gridTextColor
     }
   }
 
   public var gridLineColor: UIColor = UIColor(white: 0, alpha: 0.2) {
     didSet {
-      yAxisLeftView.gridLineColor = gridLineColor
+      yAxisView.gridLineColor = gridLineColor
     }
   }
 
@@ -97,20 +96,10 @@ public class ChartView: UIView {
         lineViews.insert(v, at: 0)
       }
 
-      yAxisLeftView.frame = chartsContainerView.bounds
-      yAxisLeftView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-      yAxisLeftView.transform = CGAffineTransform.identity.scaledBy(x: 1, y: -1)
-      chartsContainerView.addSubview(yAxisLeftView)
-
-      if chartData.type == .yScaled {
-        yAxisLeftView.textColor = chartData.lineAt(0).color
-        yAxisRightView.textColor = chartData.lineAt(1).color
-        yAxisRightView.alignment = .right
-        yAxisRightView.frame = chartsContainerView.bounds
-        yAxisRightView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        yAxisRightView.transform = CGAffineTransform.identity.scaledBy(x: 1, y: -1)
-        chartsContainerView.addSubview(yAxisRightView)
-      }
+      yAxisView.frame = chartsContainerView.bounds
+      yAxisView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+      yAxisView.transform = CGAffineTransform.identity.scaledBy(x: 1, y: -1)
+      chartsContainerView.addSubview(yAxisView)
 
       chartInfoView.frame = chartsContainerView.bounds
       chartInfoView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -141,11 +130,11 @@ public class ChartView: UIView {
 
   private func setup() {
     xAxisView.gridColor = gridTextColor
-    yAxisLeftView.gridColor = gridTextColor
-    yAxisRightView.gridColor = gridTextColor
-    yAxisLeftView.gridLineColor = gridTextColor
-    yAxisRightView.gridLineColor = gridTextColor
+    yAxisView.gridColor = gridTextColor
+    yAxisView.gridLineColor = gridTextColor
     chartInfoView.bgColor = bgColor
+    chartPreviewView.selectorTintColor = previewTintColor
+    chartPreviewView.selectorColor = previewSelectorColor
 
     panGR = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
     chartsContainerView.addGestureRecognizer(panGR)
@@ -157,16 +146,24 @@ public class ChartView: UIView {
     addSubview(xAxisView)
   }
 
+  public func setInfoX(_ x: CGFloat) {
+    chartInfoView.infoX = x
+  }
+
   override public func layoutSubviews() {
     super.layoutSubviews()
-    let chartsFrame = CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: 125)
-    chartsContainerView.frame = chartsFrame
 
-    let xAxisFrame = CGRect(x: bounds.minX, y: bounds.minY + 125, width: bounds.width, height: 26)
+    let previewFrame = CGRect(x: bounds.minX, y: bounds.maxY - 30, width: bounds.width, height: 30)
+    chartPreviewView.frame = previewFrame
+
+    let xAxisFrame = CGRect(x: bounds.minX, y: bounds.maxY - previewFrame.height - 26, width: bounds.width, height: 26)
     xAxisView.frame = xAxisFrame
 
-    let previewFrame = CGRect(x: bounds.minX, y: bounds.minY + 125 + 26, width: bounds.width, height: 30)
-    chartPreviewView.frame = previewFrame
+    let chartsFrame = CGRect(x: bounds.minX,
+                             y: bounds.minY,
+                             width: bounds.width,
+                             height: bounds.maxY - previewFrame.height - xAxisFrame.height)
+    chartsContainerView.frame = chartsFrame
   }
 
   @objc func onPinch(_ sender: UIPinchGestureRecognizer) {
@@ -192,7 +189,6 @@ public class ChartView: UIView {
     xAxisView.setBounds(lower: lower, upper: upper)
     updateCharts(animationStyle: .none)
     chartInfoView.update()
-
   }
 
   @objc func onPan(_ sender: UIPanGestureRecognizer) {
@@ -218,55 +214,13 @@ public class ChartView: UIView {
     chartInfoView.update()
   }
 
-  func updateYScaled(animationStyle: ChartAnimation = .none) {
-    for i in 0..<chartData.linesCount {
-      var lower = CGFloat(Int.max)
-      var upper = CGFloat(Int.min)
-      guard chartData.isLineVisibleAt(i) else { continue }
-      let line = chartData.lineAt(i)
-      let subrange = line.aggregatedValues[xAxisView.lowerBound...xAxisView.upperBound]
-      subrange.forEach {
-        upper = max($0, CGFloat(upper))
-        lower = min($0, CGFloat(lower))
-      }
-
-      let step = ceil(CGFloat(upper - lower) / 5)
-      upper = lower + step * 5
-      var steps: [CGFloat] = []
-      for i in 0..<5 {
-        steps.append(lower + step * CGFloat(i))
-      }
-
-      let yAxisView = i == 0 ? yAxisLeftView : yAxisRightView
-      if (yAxisView.upperBound != upper || yAxisView.lowerBound != lower) {
-        yAxisView.setBounds(lower: lower, upper: upper, steps: steps, animationStyle: animationStyle)
-      }
-
-      let lineView = lineViews[i]
-      lineView.setViewport(minX: xAxisView.lowerBound,
-                           maxX: xAxisView.upperBound,
-                           minY: lower,
-                           maxY: upper,
-                           animationStyle: animationStyle)
-
-    }
-  }
-
   func updateCharts(animationStyle: ChartAnimation = .none) {
-    if chartData.type == .yScaled {
-      updateYScaled(animationStyle: animationStyle)
-      return
-    }
-
     var lower = CGFloat(Int.max)
     var upper = CGFloat(Int.min)
 
     for i in 0..<chartData.linesCount {
       guard chartData.isLineVisibleAt(i) else { continue }
       let line = chartData.lineAt(i)
-      if line.type == .area || line.type == .bar {
-        lower = min(line.minY, lower)
-      }
       let subrange = line.aggregatedValues[xAxisView.lowerBound...xAxisView.upperBound]
       subrange.forEach {
         upper = max($0, upper)
@@ -288,8 +242,13 @@ public class ChartView: UIView {
       steps.append(lower + step * CGFloat(i))
     }
 
-    if yAxisLeftView.upperBound != upper || yAxisLeftView.lowerBound != lower {
-      yAxisLeftView.setBounds(lower: lower, upper: upper, steps: steps, animationStyle: animationStyle)
+    if yAxisView.upperBound != upper || yAxisView.lowerBound != lower {
+      yAxisView.setBounds(lower: lower,
+                          upper: upper,
+                          lowerLabel: chartData.formatter.altitudeString(from: Double(lower)),
+                          upperLabel: chartData.formatter.altitudeString(from: Double(upper)),
+                          steps: steps,
+                          animationStyle: animationStyle)
     }
 
     lineViews.forEach {
@@ -321,7 +280,7 @@ extension ChartView: ChartInfoViewDelegate {
     let x1 = Int(floor(x))
     let x2 = Int(ceil(x))
     guard x1 < chartData.labels.count && x >= 0 else { return nil }
-    let date = chartData.labelAt(x1)
+    let label = chartData.labelAt(x)
 
     var result: [ChartLineInfo] = []
     for i in 0..<chartData.linesCount {
@@ -330,37 +289,23 @@ extension ChartView: ChartInfoViewDelegate {
       guard line.type != .lineArea else { continue }
       let y1 = line.values[x1]
       let y2 = line.values[x2]
-      let yAxisView: ChartYAxisView
-      if chartData.type == .yScaled && i == 1 {
-        yAxisView = yAxisRightView
-      } else {
-        yAxisView = yAxisLeftView
-      }
 
       let dx = x - CGFloat(x1)
       let y = dx * (y2 - y1) + y1
       let py = round(chartsContainerView.bounds.height * CGFloat(y - yAxisView.lowerBound) /
         CGFloat(yAxisView.upperBound - yAxisView.lowerBound))
-      var left: CGFloat? = nil
-      var right: CGFloat? = nil
-      if line.type == .bar {
-        left = chartsContainerView.convert(CGPoint(x: x1, y: 0), to: view).x
-        right = chartsContainerView.convert(CGPoint(x: x2, y: 0), to: view).x
-      }
 
       let v1 = line.originalValues[x1]
       let v2 = line.originalValues[x2]
-      let v = Int(round(dx * CGFloat(v2 - v1))) + v1
+      let v = round(dx * CGFloat(v2 - v1)) + CGFloat(v1)
       onSelectedPointChanged?(x)
       result.append(ChartLineInfo(name: line.name,
                                   color: line.color,
                                   point: chartsContainerView.convert(CGPoint(x: p.x, y: py), to: view),
-                                  value: v,
-                                  left: left,
-                                  rigth: right))
+                                  formattedValue: chartData.formatter.altitudeString(from: Double(v))))
     }
 
-    return (date, result)
+    return (label, result)
   }
 }
 

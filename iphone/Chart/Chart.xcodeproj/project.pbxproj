@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		47375D9B2420D4DB00FFCC49 /* Chart.h in Headers */ = {isa = PBXBuildFile; fileRef = 47375D992420D4DB00FFCC49 /* Chart.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		47375E3C2420E94E00FFCC49 /* ChartPresentationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E392420E94C00FFCC49 /* ChartPresentationData.swift */; };
-		47375E3D2420E94E00FFCC49 /* KmlPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E3A2420E94D00FFCC49 /* KmlPoints.swift */; };
 		47375E3E2420E94E00FFCC49 /* ChartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E3B2420E94E00FFCC49 /* ChartData.swift */; };
 		47375E4B2420E97100FFCC49 /* ChartXAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E3F2420E96C00FFCC49 /* ChartXAxisView.swift */; };
 		47375E4C2420E97100FFCC49 /* ChartLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E402420E96D00FFCC49 /* ChartLineView.swift */; };
@@ -20,7 +19,6 @@
 		47375E512420E97100FFCC49 /* ChartMyPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E462420E96F00FFCC49 /* ChartMyPositionView.swift */; };
 		47375E522420E97100FFCC49 /* ChartYAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E472420E96F00FFCC49 /* ChartYAxisView.swift */; };
 		47375E542420E97100FFCC49 /* ChartPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E492420E97100FFCC49 /* ChartPreviewView.swift */; };
-		47375E552420E97100FFCC49 /* ChartSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47375E4A2420E97100FFCC49 /* ChartSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,7 +26,6 @@
 		47375D992420D4DB00FFCC49 /* Chart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chart.h; sourceTree = "<group>"; };
 		47375D9A2420D4DB00FFCC49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		47375E392420E94C00FFCC49 /* ChartPresentationData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartPresentationData.swift; sourceTree = "<group>"; };
-		47375E3A2420E94D00FFCC49 /* KmlPoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KmlPoints.swift; sourceTree = "<group>"; };
 		47375E3B2420E94E00FFCC49 /* ChartData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartData.swift; sourceTree = "<group>"; };
 		47375E3F2420E96C00FFCC49 /* ChartXAxisView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartXAxisView.swift; sourceTree = "<group>"; };
 		47375E402420E96D00FFCC49 /* ChartLineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartLineView.swift; sourceTree = "<group>"; };
@@ -39,7 +36,6 @@
 		47375E462420E96F00FFCC49 /* ChartMyPositionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartMyPositionView.swift; sourceTree = "<group>"; };
 		47375E472420E96F00FFCC49 /* ChartYAxisView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartYAxisView.swift; sourceTree = "<group>"; };
 		47375E492420E97100FFCC49 /* ChartPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartPreviewView.swift; sourceTree = "<group>"; };
-		47375E4A2420E97100FFCC49 /* ChartSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +81,6 @@
 			children = (
 				47375E3B2420E94E00FFCC49 /* ChartData.swift */,
 				47375E392420E94C00FFCC49 /* ChartPresentationData.swift */,
-				47375E3A2420E94D00FFCC49 /* KmlPoints.swift */,
 			);
 			path = ChartData;
 			sourceTree = "<group>";
@@ -97,7 +92,6 @@
 				47375E412420E96D00FFCC49 /* ChartView.swift */,
 				47375E402420E96D00FFCC49 /* ChartLineView.swift */,
 				47375E492420E97100FFCC49 /* ChartPreviewView.swift */,
-				47375E4A2420E97100FFCC49 /* ChartSettingsView.swift */,
 				47375E3F2420E96C00FFCC49 /* ChartXAxisView.swift */,
 				47375E472420E96F00FFCC49 /* ChartYAxisView.swift */,
 			);
@@ -201,9 +195,7 @@
 				47375E502420E97100FFCC49 /* ChartPointIntersectionsView.swift in Sources */,
 				47375E522420E97100FFCC49 /* ChartYAxisView.swift in Sources */,
 				47375E4B2420E97100FFCC49 /* ChartXAxisView.swift in Sources */,
-				47375E552420E97100FFCC49 /* ChartSettingsView.swift in Sources */,
 				47375E542420E97100FFCC49 /* ChartPreviewView.swift in Sources */,
-				47375E3D2420E94E00FFCC49 /* KmlPoints.swift in Sources */,
 				47375E3C2420E94E00FFCC49 /* ChartPresentationData.swift in Sources */,
 				47375E4D2420E97100FFCC49 /* ChartView.swift in Sources */,
 				47375E4F2420E97100FFCC49 /* ChartPointInfoView.swift in Sources */,

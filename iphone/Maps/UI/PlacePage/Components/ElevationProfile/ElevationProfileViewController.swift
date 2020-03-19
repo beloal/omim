@@ -7,7 +7,8 @@ protocol ElevationProfileViewProtocol: class {
   func setExtendedDifficultyGrade(_ value: String)
   func setTrackTime(_ value: String?)
   func setDifficulty(_ value: ElevationDifficulty)
-  func setChartData(_ data: IChartData)
+  func setChartData(_ data: ChartPresentationData)
+  func setActivePoint(_ distance: Double)
 }
 
 class ElevationProfileViewController: UIViewController {
@@ -62,14 +63,20 @@ extension ElevationProfileViewController: ElevationProfileViewProtocol {
   func setExtendedDifficultyGrade(_ value: String) {
     extendedDifficultyGradeLabel.text = value
   }
+
   func setTrackTime(_ value: String?) {
     trackTimeLabel.text = value
   }
+
   func setDifficulty(_ value: ElevationDifficulty) {
     difficultyView.difficulty = value
   }
-  func setChartData(_ data: IChartData) {
-    let presentationData = ChartPresentationData(data, useFilter: true)
-    chartView.chartData = presentationData
+
+  func setChartData(_ data: ChartPresentationData) {
+    chartView.chartData = data
+  }
+
+  func setActivePoint(_ distance: Double) {
+    chartView.setInfoX(CGFloat(distance))
   }
 }

@@ -15,7 +15,7 @@ fileprivate class ChartXAxisInnerView: UIView {
 
   override var frame: CGRect {
     didSet {
-      if upperBound > 0 && lowerBound > 0 {
+      if upperBound > 0 {
         updateLabels()
       }
     }

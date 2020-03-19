@@ -4,9 +4,7 @@ struct ChartLineInfo {
   let name: String
   let color: UIColor
   let point: CGPoint
-  let value: Int
-  let left: CGFloat?
-  let rigth: CGFloat?
+  let formattedValue: String
 }
 
 protocol ChartInfoViewDelegate: AnyObject {
@@ -28,6 +26,8 @@ class ChartInfoView: UIView {
     }
   }
 
+  var infoX: CGFloat = 0
+
   var bgColor: UIColor = UIColor.white
 
   var textColor: UIColor = UIColor.black {
@@ -41,6 +41,9 @@ class ChartInfoView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
+//      addSubview(myPositionView)
+    addSubview(pointsView)
+    addSubview(pointInfoView)
     isExclusiveTouch = true
     panGR = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
     panGR.delegate = self
@@ -62,6 +65,7 @@ class ChartInfoView: UIView {
     lineInfo = intersectionPoints[0]
     self.pointsView.updatePoints(intersectionPoints)
     pointInfoView.update(x: x, label: label, points: intersectionPoints)
+    updateViews(point: lineInfo!.point)
     let y = max(pointInfoView.frame.height / 2 + 5,
                 min(bounds.height - pointInfoView.frame.height / 2 - 5, bounds.height - lineInfo!.point.y));
     pointInfoView.center = CGPoint(x: pointInfoView.center.x, y: y)
@@ -129,11 +133,8 @@ class ChartInfoView: UIView {
     myPositionView.frame = mf
 
     if lineInfo == nil, bounds.width > 0 {
-      let x = bounds.width / 1.5
+      let x = bounds.width * infoX
       guard let (date, intersectionPoints) = delegate?.chartInfoView(self, infoAtPointX: x) else { return }
-//      addSubview(myPositionView)
-      addSubview(pointsView)
-      addSubview(pointInfoView)
       lineInfo = intersectionPoints[0]
       pointsView.setPoints(intersectionPoints)
       pointInfoView.set(x: x, label: date, points: intersectionPoints)

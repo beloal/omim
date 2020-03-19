@@ -83,12 +83,13 @@ class ChartPointInfoView: UIView {
 
   func set(x: CGFloat, label: String, points: [ChartLineInfo]) {
     distanceLabel.text = label
-    altitudeLabel.text = "▲ \(points[0].value)"
+    altitudeLabel.text = "▲ \(points[0].formattedValue)"
   }
 
   func update(x: CGFloat, label: String, points: [ChartLineInfo]) {
     distanceLabel.text = label
-    altitudeLabel.text = "▲ \(points[0].value)"
+    altitudeLabel.text = "▲ \(points[0].formattedValue)"
+    layoutIfNeeded()
   }
 
   override func layoutSubviews() {

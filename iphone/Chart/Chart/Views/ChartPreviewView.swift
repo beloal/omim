@@ -106,20 +106,16 @@ class ChartPreviewView: UIView {
         previewContainerView.addSubview(v)
         previewViews.insert(v, at: 0)
       }
-      if chartData.type != .yScaled {
-        previewViews.forEach { $0.setY(min: chartData.lower, max: chartData.upper) }
-      }
+      previewViews.forEach { $0.setY(min: chartData.lower, max: chartData.upper) }
       let count = chartData.pointsCount - 1
-      minX = count - count / 5
+      minX = 0
       maxX = count
       updateViewPort()
     }
   }
 
   func setLineVisible(_ visible: Bool, atIndex index: Int) {
-    if chartData.type != .yScaled {
-      previewViews.forEach { $0.setY(min: chartData.lower, max: chartData.upper, animationStyle: .animated) }
-    }
+    previewViews.forEach { $0.setY(min: chartData.lower, max: chartData.upper, animationStyle: .animated) }
     let pv = previewViews[index]
     UIView.animate(withDuration: kAnimationDuration) {
       pv.alpha = visible ? 1 : 0

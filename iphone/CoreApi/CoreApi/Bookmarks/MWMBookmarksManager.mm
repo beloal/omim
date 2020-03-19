@@ -772,5 +772,4 @@
   self.bm.SetElevationActivePoint(trackId, distance);
 }
 
-
 @end

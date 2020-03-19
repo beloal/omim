@@ -126,7 +126,10 @@ static PlacePageRoadType convertRoadType(RoadWarningMarkType roadType) {
     }
 
     if (rawData().IsTrack()) {
-      _elevationProfileData = [[ElevationProfileData alloc] initWithElevationInfo:GetFramework().GetBookmarkManager().MakeElevationInfo(rawData().GetTrackId())];
+      auto const &bm = GetFramework().GetBookmarkManager();
+      auto const &trackId = rawData().GetTrackId();
+      _elevationProfileData = [[ElevationProfileData alloc] initWithElevationInfo:bm.MakeElevationInfo(trackId)
+                                                                      activePoint:bm.GetElevationActivePoint(trackId)];
     }
   }
   return self;

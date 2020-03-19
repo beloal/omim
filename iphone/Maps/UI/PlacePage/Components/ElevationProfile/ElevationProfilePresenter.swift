@@ -31,12 +31,15 @@ class ElevationProfilePresenter: NSObject {
   private let cellSpacing: CGFloat = 8
   private let descriptionModels: [DescriptionsViewModel]
   private let chartData: ElevationProfileChartData
+  private let imperialUnits: Bool
 
   init(view: ElevationProfileViewProtocol,
        data: ElevationProfileData,
+       imperialUnits: Bool,
        delegate: ElevationProfileViewControllerDelegate?) {
     self.view = view
     self.data = data
+    self.imperialUnits = imperialUnits
     self.delegate = delegate
     chartData = ElevationProfileChartData(data)
 
@@ -53,7 +56,12 @@ extension ElevationProfilePresenter: ElevationProfilePresenterProtocol {
   func configure() {
     view?.setDifficulty(data.difficulty)
     view?.setTrackTime("\(data.trackTime)")
-    view?.setChartData(chartData)
+    let presentationData = ChartPresentationData(chartData,
+                                                 formatter: ChartFormatter(imperial: imperialUnits),
+                                                 useFilter: true)
+    view?.setChartData(presentationData)
+    let routeLength = data.points.last!.distance
+    view?.setActivePoint(data.activePoint / routeLength)
 //    if let extendedDifficultyGrade = data.extendedDifficultyGrade {
 //      view?.isExtendedDifficultyLabelHidden = false
 //      view?.setExtendedDifficultyGrade(extendedDifficultyGrade)
@@ -104,7 +112,7 @@ extension ElevationProfilePresenter: ElevationProfilePresenterProtocol {
     let x2 = Int(ceil(point))
     let d1: Double = chartData.points[x1].distance
     let d2: Double = chartData.points[x2].distance
-    let dx = Double(point - floor(point))
+    let dx = Double(point.truncatingRemainder(dividingBy: 1))
     let distance = d1 + (d2 - d1) * dx
     delegate?.updateMapPoint(distance)
   }
@@ -141,7 +149,7 @@ extension ElevationProfilePresenter {
   }
 }
 
-struct ElevationProfileChartData {
+fileprivate struct ElevationProfileChartData {
   struct Line: IChartLine {
     var values: [Int]
     var name: String
@@ -150,16 +158,17 @@ struct ElevationProfileChartData {
   }
 
   fileprivate let chartLines: [Line]
-  fileprivate let labels: [String]
+  fileprivate let distances: [Double]
   fileprivate let points: [ElevationHeightPoint]
 
   init(_ elevationData: ElevationProfileData) {
     points = ElevationProfileChartData.rearrangePoints(elevationData.points)
     let values = points.map { Int($0.altitude) }
-    let formatter = MKDistanceFormatter()
-    formatter.unitStyle = .abbreviated
-    formatter.units = .metric
-    labels = points.map { formatter.string(fromDistance: $0.distance )}
+//    let formatter = MKDistanceFormatter()
+//    formatter.unitStyle = .abbreviated
+//    formatter.units = .metric
+//    labels = points.map { formatter.string(fromDistance: $0.distance )}
+    distances = points.map { $0.distance }
     let color = UIColor(red: 0.12, green: 0.59, blue: 0.94, alpha: 1)
     let l1 = Line(values: values, name: "Altitude", color: color, type: .line)
     let l2 = Line(values: values, name: "Altitude", color: color.withAlphaComponent(0.12), type: .lineArea)
@@ -208,8 +217,8 @@ struct ElevationProfileChartData {
 }
 
 extension ElevationProfileChartData: IChartData {
-  public var xAxisLabels: [String] {
-    labels
+  public var xAxisValues: [Double] {
+    distances
   }
 
   public var lines: [IChartLine] {
@@ -218,5 +227,32 @@ extension ElevationProfileChartData: IChartData {
 
   public var type: ChartType {
     .regular
+  }
+}
+
+fileprivate struct ChartFormatter: IFormatter {
+  private let distanceFormatter: MKDistanceFormatter
+  private let altFormatter: MeasurementFormatter
+  private let imperial: Bool
+
+  init(imperial: Bool) {
+    self.imperial = imperial
+
+    distanceFormatter = MKDistanceFormatter()
+    distanceFormatter.units = imperial ? .imperial : .metric
+    distanceFormatter.unitStyle = .abbreviated
+
+    altFormatter = MeasurementFormatter()
+    altFormatter.unitOptions = [.providedUnit]
+  }
+
+  func distanceString(from value: Double) -> String {
+    distanceFormatter.string(fromDistance: value)
+  }
+
+  func altitudeString(from value: Double) -> String {
+    let alt = imperial ? value / 0.3048 : value
+    let measurement = Measurement(value: alt.rounded(), unit: imperial ? UnitLength.feet : UnitLength.meters)
+    return altFormatter.string(from: measurement)
   }
 }

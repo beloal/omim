@@ -104,11 +104,11 @@ fileprivate class ChartYAxisInnerView: UIView {
     return label
   }
 
-  func setBounds(lower: CGFloat, upper: CGFloat, steps: [CGFloat]) {
+  func setBounds(lower: CGFloat, upper: CGFloat, lowerLabelText: String, upperLabelText: String, steps: [CGFloat]) {
     lowerBound = lower
     upperBound = upper
-    lowerLabel.text = "\(Int(round(lower)))"
-    upperLabel.text = "\(Int(round(upper)))"
+    lowerLabel.text = lowerLabelText
+    upperLabel.text = upperLabelText
     self.steps = steps
 
     updateGrid()
@@ -183,7 +183,12 @@ class ChartYAxisView: UIView {
 
   private var gridView: ChartYAxisInnerView?
 
-  func setBounds(lower: CGFloat, upper: CGFloat, steps: [CGFloat], animationStyle: ChartAnimation = .none) {
+  func setBounds(lower: CGFloat,
+                 upper: CGFloat,
+                 lowerLabel: String,
+                 upperLabel: String,
+                 steps: [CGFloat],
+                 animationStyle: ChartAnimation = .none) {
     let gv = ChartYAxisInnerView()
     gv.alignment = alignment
     gv.textColor = textColor
@@ -195,7 +200,11 @@ class ChartYAxisView: UIView {
 
     if let gridView = gridView {
       if animationStyle == .animated {
-        gv.setBounds(lower: lowerBound, upper: upperBound, steps: steps)
+        gv.setBounds(lower: lowerBound,
+                     upper: upperBound,
+                     lowerLabelText: lowerLabel,
+                     upperLabelText: upperLabel,
+                     steps: steps)
         gv.alpha = 0
         gv.updateBounds(lower: lower, upper:upper, animationStyle: animationStyle)
         gridView.updateBounds(lower: lower, upper:upper, animationStyle: animationStyle)
@@ -206,11 +215,11 @@ class ChartYAxisView: UIView {
           gridView.removeFromSuperview()
         }
       } else {
-        gv.setBounds(lower: lower, upper: upper, steps: steps)
+        gv.setBounds(lower: lower, upper: upper, lowerLabelText: lowerLabel, upperLabelText: upperLabel, steps: steps)
         gridView.removeFromSuperview()
       }
     } else {
-      gv.setBounds(lower: lower, upper: upper, steps: steps)
+      gv.setBounds(lower: lower, upper: upper, lowerLabelText: lowerLabel, upperLabelText: upperLabel, steps: steps)
     }
 
     gridView = gv
