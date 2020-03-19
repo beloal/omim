@@ -114,14 +114,6 @@ class ChartPreviewView: UIView {
     }
   }
 
-  func setLineVisible(_ visible: Bool, atIndex index: Int) {
-    previewViews.forEach { $0.setY(min: chartData.lower, max: chartData.upper, animationStyle: .animated) }
-    let pv = previewViews[index]
-    UIView.animate(withDuration: kAnimationDuration) {
-      pv.alpha = visible ? 1 : 0
-    }
-  }
-
   override init(frame: CGRect) {
     super.init(frame: frame)
     previewContainerView.translatesAutoresizingMaskIntoConstraints = false

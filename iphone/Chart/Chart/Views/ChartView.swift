@@ -1,12 +1,5 @@
 import UIKit
 
-let kAnimationDuration = 0.3
-let df: DateFormatter = {
-  let f = DateFormatter()
-  f.dateStyle = .medium
-  return f
-}()
-
 enum ChartAnimation: TimeInterval {
   case none = 0.0
   case animated = 0.3
@@ -20,10 +13,6 @@ public class ChartView: UIView {
   let xAxisView = ChartXAxisView()
   let chartInfoView = ChartInfoView()
   var lineViews: [ChartLineView] = []
-  public var maxWidth: CGFloat = 0
-  public var height: CGFloat {
-    return 56 + 125
-  }
 
   private var panStartPoint = 0
   private var panGR: UIPanGestureRecognizer!
@@ -81,7 +70,6 @@ public class ChartView: UIView {
 
   public var chartData: ChartPresentationData! {
     didSet {
-      chartData.delegate = self
       lineViews.forEach { $0.removeFromSuperview() }
       lineViews.removeAll()
       for i in (0..<chartData.linesCount).reversed() {
@@ -219,7 +207,6 @@ public class ChartView: UIView {
     var upper = CGFloat(Int.min)
 
     for i in 0..<chartData.linesCount {
-      guard chartData.isLineVisibleAt(i) else { continue }
       let line = chartData.lineAt(i)
       let subrange = line.aggregatedValues[xAxisView.lowerBound...xAxisView.upperBound]
       subrange.forEach {
@@ -284,7 +271,6 @@ extension ChartView: ChartInfoViewDelegate {
 
     var result: [ChartLineInfo] = []
     for i in 0..<chartData.linesCount {
-      guard chartData.isLineVisibleAt(i) else { continue }
       let line = chartData.lineAt(i)
       guard line.type != .lineArea else { continue }
       let y1 = line.values[x1]
@@ -306,16 +292,5 @@ extension ChartView: ChartInfoViewDelegate {
     }
 
     return (label, result)
-  }
-}
-
-extension ChartView: ChartPresentationDataDelegate {
-  public func chartPresentationData(_ data: ChartPresentationData, didSetLineVisble visible: Bool, at index: Int) {
-    updateCharts(animationStyle: .animated)
-    chartPreviewView.setLineVisible(visible, atIndex: index)
-    let lv = lineViews[index]
-    UIView.animate(withDuration: kAnimationDuration) {
-      lv.alpha = visible ? 1 : 0
-    }
   }
 }

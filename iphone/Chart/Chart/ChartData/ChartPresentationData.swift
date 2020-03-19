@@ -1,9 +1,5 @@
 import UIKit
 
-public protocol ChartPresentationDataDelegate: AnyObject {
-  func chartPresentationData(_ data: ChartPresentationData, didSetLineVisble visible: Bool, at index: Int)
-}
-
 public class ChartPresentationData {
   private let chartData: IChartData
   private var presentationLines: [ChartPresentationLine]
@@ -26,7 +22,6 @@ public class ChartPresentationData {
   var labels: [String]
   var lower = CGFloat(Int.max)
   var upper = CGFloat(Int.min)
-  weak var delegate: ChartPresentationDataDelegate?
 
   func labelAt(_ point: CGFloat) -> String {
     let p1 = Int(floor(point))
@@ -37,32 +32,17 @@ public class ChartPresentationData {
     return formatter.distanceString(from: value)
   }
 
-  func isLineVisibleAt(_ index: Int) -> Bool {
-    return presentationLines[index].isVisible
-  }
-
-  func setLineVisible(_ visible: Bool, at index: Int) {
-    if !visible {
-      let visibleCount = presentationLines.reduce(into: 0) { (r, b) in if b.isVisible { r += 1 } }
-      if visibleCount == 1 { return }
-    }
-    presentationLines[index].isVisible = visible
-    recalcBounds()
-    delegate?.chartPresentationData(self, didSetLineVisble: visible, at: index)
-  }
-
   func lineAt(_ index: Int) -> ChartPresentationLine {
     return presentationLines[index]
   }
 
   private func recalcBounds() {
-    let visibleLines = presentationLines.filter { $0.isVisible }
     presentationLines.forEach { $0.aggregatedValues = [] }
     pathBuilder.build(presentationLines, type: type)
 
     var l = CGFloat(Int.max)
     var u = CGFloat(Int.min)
-    visibleLines.forEach {
+    presentationLines.forEach {
       l = min($0.minY, l)
       u = max($0.maxY, u)
     }
@@ -75,7 +55,6 @@ class ChartPresentationLine {
   private let chartLine: IChartLine
   private let useFilter: Bool
 
-  var isVisible = true
   var aggregatedValues: [CGFloat] = []
   var minY: CGFloat = CGFloat(Int.max)
   var maxY: CGFloat = CGFloat(Int.min)
@@ -149,14 +128,6 @@ extension IChartPathBuilder {
     path.move(to: CGPoint(x: 0, y: 0))
     var filter = LowPassFilter(value: 0, filterFactor: 0.3)
 
-    if !line.isVisible {
-      guard let bl = bottomLine else {
-        line.previewPath.apply(CGAffineTransform.identity.scaledBy(x: 1, y: 0))
-        return line.previewPath
-      }
-      return bl.previewPath
-    }
-
     let step = 5
     let aggregatedValues = line.aggregatedValues.enumerated().compactMap { $0 % step == 0 ? $1 : nil }
     for i in 0..<aggregatedValues.count {
@@ -173,14 +144,6 @@ extension IChartPathBuilder {
   func makePercentLinePath(line: ChartPresentationLine, bottomLine: ChartPresentationLine?) -> UIBezierPath {
     let path = UIBezierPath()
     path.move(to: CGPoint(x: 0, y: 0))
-
-    if !line.isVisible {
-      guard let bl = bottomLine else {
-        line.path.apply(CGAffineTransform.identity.scaledBy(x: 1, y: 0))
-        return line.path
-      }
-      return bl.path
-    }
 
     let aggregatedValues = line.aggregatedValues
     for i in 0..<aggregatedValues.count {
@@ -239,29 +202,26 @@ class LinePathBuilder: IChartPathBuilder {
 
 class PercentagePathBuilder: IChartPathBuilder {
   func build(_ lines: [ChartPresentationLine]) {
-    let visibleLines = lines.filter { $0.isVisible }
-    visibleLines.forEach {
+    lines.forEach {
       $0.minY = 0
       $0.maxY = CGFloat(Int.min)
     }
 
-    for i in 0..<visibleLines[0].values.count {
-      let sum = CGFloat(visibleLines.reduce(0) { (r, l) in r + l.values[i] })
+    for i in 0..<lines[0].values.count {
+      let sum = CGFloat(lines.reduce(0) { (r, l) in r + l.values[i] })
       var aggrPercentage: CGFloat = 0
-      visibleLines.forEach {
+      lines.forEach {
         aggrPercentage += CGFloat($0.values[i]) / sum * 100
         $0.aggregatedValues.append(aggrPercentage)
         $0.maxY = max(round(aggrPercentage), CGFloat($0.maxY))
       }
     }
 
-    var prevVisibleLine: ChartPresentationLine? = nil
+    var prevLine: ChartPresentationLine? = nil
     lines.forEach {
-      $0.path = makePercentLinePath(line: $0, bottomLine: prevVisibleLine)
-      $0.previewPath = makePercentLinePreviewPath(line: $0, bottomLine: prevVisibleLine)
-      if $0.isVisible {
-        prevVisibleLine = $0
-      }
+      $0.path = makePercentLinePath(line: $0, bottomLine: prevLine)
+      $0.previewPath = makePercentLinePreviewPath(line: $0, bottomLine: prevLine)
+      prevLine = $0
     }
   }
 }
