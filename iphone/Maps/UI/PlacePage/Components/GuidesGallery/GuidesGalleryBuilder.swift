@@ -8,7 +8,8 @@ final class GuidesGalleryBuilder: NSObject {
 
     let storyboard = UIStoryboard.instance(.placePage)
     let viewController = storyboard.instantiateViewController(ofType: GuidesGalleryViewController.self);
-    let presenter = GuidesGalleryPresenter(view: viewController, guidesGallery: guidesGalleryData)
+    let router = GuidesGalleryRouter(MapViewController.shared())
+    let presenter = GuidesGalleryPresenter(view: viewController, router: router, guidesGallery: guidesGalleryData)
     viewController.presenter = presenter
     return viewController
   }

@@ -45,6 +45,7 @@ typedef void (^ElevationPointChangedBlock)(double distance);
 - (void)setCatalogCategoriesVisible:(BOOL)isVisible;
 - (void)deleteCategory:(MWMMarkGroupID)groupId;
 - (BOOL)checkCategoryName:(NSString *)name;
+- (MWMMarkGroupID)categoryIdByServerId:(NSString *)serverId;
 
 - (NSArray<MWMCarPlayBookmarkObject *> *)bookmarksForCategory:(MWMMarkGroupID)categoryId;
 - (MWMMarkIDCollection)bookmarkIdsForCategory:(MWMMarkGroupID)categoryId;
@@ -116,6 +117,7 @@ typedef void (^ElevationPointChangedBlock)(double distance);
 
 - (BOOL)isGuide:(MWMMarkGroupID)groupId;
 - (NSString *)getServerId:(MWMMarkGroupID)groupId;
+- (MWMMarkGroupID)getGroupId:(NSString *)serverId;
 - (NSString *)getGuidesIds;
 - (NSString *)deviceId;
 - (NSDictionary<NSString *, NSString *> *)getCatalogHeaders;

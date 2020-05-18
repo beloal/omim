@@ -3534,6 +3534,9 @@
                                                                         <userDefinedRuntimeAttribute type="string" keyPath="styleName" value="GuidesGalleryShowButton"/>
                                                                         <userDefinedRuntimeAttribute type="string" keyPath="localizedText" value="routes_card_show"/>
                                                                     </userDefinedRuntimeAttributes>
+                                                                    <connections>
+                                                                        <action selector="onShowButton:" destination="vXV-CJ-9mO" eventType="touchUpInside" id="n4Y-oo-boV"/>
+                                                                    </connections>
                                                                 </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3573,6 +3576,7 @@
                                             <outlet property="infoLabel" destination="T92-vb-Iw2" id="6qo-x5-pdI"/>
                                             <outlet property="subtitleLabel" destination="DJM-1n-xZk" id="eRD-jU-HuB"/>
                                             <outlet property="titleLabel" destination="IHh-ww-fGs" id="ydg-oI-Niu"/>
+                                            <outlet property="visibilityButton" destination="6nH-8K-eby" id="ZoM-hE-g4Q"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GuidesGalleryOutdoorCell" id="fvq-qZ-nN0" customClass="GuidesGalleryOutdoorCell" customModule="maps_me" customModuleProvider="target">
@@ -3706,14 +3710,14 @@
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HfX-lS-ZTE">
                                                                                     <rect key="frame" x="8.5" y="0.0" width="55" height="24"/>
                                                                                     <subviews>
-                                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="routes_gallery_distance" translatesAutoresizingMaskIntoConstraints="NO" id="mUJ-s9-Rcj">
+                                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="routes_gallery_distance" translatesAutoresizingMaskIntoConstraints="NO" id="mUJ-s9-Rcj">
                                                                                             <rect key="frame" x="0.0" y="9" width="12" height="6"/>
                                                                                             <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                             <userDefinedRuntimeAttributes>
                                                                                                 <userDefinedRuntimeAttribute type="string" keyPath="styleName" value="MWMBlack"/>
                                                                                             </userDefinedRuntimeAttributes>
                                                                                         </imageView>
-                                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" ambiguous="YES" text="30 km" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5lj-0X-MAg">
+                                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="30 km" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5lj-0X-MAg">
                                                                                             <rect key="frame" x="18" y="5" width="37" height="14.5"/>
                                                                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
                                                                                             <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3800,6 +3804,9 @@
                                                                         <userDefinedRuntimeAttribute type="string" keyPath="styleName" value="GuidesGalleryShowButton"/>
                                                                         <userDefinedRuntimeAttribute type="string" keyPath="localizedText" value="routes_card_show"/>
                                                                     </userDefinedRuntimeAttributes>
+                                                                    <connections>
+                                                                        <action selector="onShowButton:" destination="fvq-qZ-nN0" eventType="touchUpInside" id="q7V-uk-oFJ"/>
+                                                                    </connections>
                                                                 </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3841,6 +3848,7 @@
                                             <outlet property="subtitleLabel" destination="ooq-8D-naO" id="kAA-Iy-bp6"/>
                                             <outlet property="timeLabel" destination="0DR-KK-hLv" id="oo7-iD-WAB"/>
                                             <outlet property="titleLabel" destination="2ep-jd-hgu" id="Dzd-ja-8Zw"/>
+                                            <outlet property="visibilityButton" destination="IbO-vW-axm" id="INP-GN-ieI"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
