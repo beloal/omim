@@ -8,7 +8,7 @@ protocol IGuidesGalleryPresenter {
 }
 
 final class GuidesGalleryPresenter {
-  private weak var view: IGuidesGalleryView?
+  private unowned var view: IGuidesGalleryView
   private var router: IGuidesGalleryRouter
   private var guidesGallery: GuidesGalleryData
   private let formatter = ChartFormatter(imperial: Settings.measurementUnits() == .imperial)
@@ -61,14 +61,14 @@ extension GuidesGalleryPresenter: IGuidesGalleryPresenter {
       guard let activeIndex = self.guidesGallery.galleryItems.firstIndex(where: {
         $0.guideId == activeGuideId
       }) else { return }
-      self.view?.setActiveItem(activeIndex, animated: true)
+      self.view.setActiveItem(activeIndex, animated: true)
     }
 
-    view?.setGalleryItems(guidesGallery.galleryItems.map({ makeViewModel($0) }))
+    view.setGalleryItems(guidesGallery.galleryItems.map({ makeViewModel($0) }))
     guard let activeIndex = guidesGallery.galleryItems.firstIndex(where: {
       $0.guideId == guidesGallery.activeGuideId
     }) else { return }
-    view?.setActiveItem(activeIndex, animated: false)
+    view.setActiveItem(activeIndex, animated: false)
   }
 
   func selectItemAtIndex(_ index: Int) {
@@ -88,7 +88,7 @@ extension GuidesGalleryPresenter: IGuidesGalleryPresenter {
     let visible = MWMBookmarksManager.shared().isCategoryVisible(groupId)
     MWMBookmarksManager.shared().setCategory(groupId, isVisible: !visible)
     let model = makeViewModel(galleryItem)
-    view?.updateItem(model, at: index)
+    view.updateItem(model, at: index)
   }
 }
 

@@ -8,7 +8,7 @@ protocol IGuidesGalleryView: AnyObject {
 
 final class GuidesGalleryViewController: UIViewController {
   @IBOutlet private var collectionView: UICollectionView!
-  var presenter: IGuidesGalleryPresenter?
+  var presenter: IGuidesGalleryPresenter!
   private var galleryItems: [IGuidesGalleryItemViewModel] = []
   private var selectedIndex = 0
 
@@ -18,12 +18,12 @@ final class GuidesGalleryViewController: UIViewController {
     let layout = RoutesGalleryLayout()
     layout.onScrollToItem = { [weak self] index in
       guard let self = self, self.selectedIndex != index else { return }
-      self.presenter?.scrollToItemAtIndex(index)
+      self.presenter.scrollToItemAtIndex(index)
       self.selectedIndex = index
     }
     collectionView.collectionViewLayout = layout
     collectionView.decelerationRate = .fast
-    presenter?.viewDidLoad()
+    presenter.viewDidLoad()
   }
 
   private func applyTransform() {
@@ -64,7 +64,7 @@ extension GuidesGalleryViewController: UICollectionViewDataSource {
 
 extension GuidesGalleryViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    presenter?.selectItemAtIndex(indexPath.item)
+    presenter.selectItemAtIndex(indexPath.item)
   }
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -102,7 +102,7 @@ extension GuidesGalleryViewController: IGuidesGalleryView {
 extension GuidesGalleryViewController: GuidesGalleryCellDelegate {
   func onShowButton(_ cell: GuidesGalleryCell) {
     guard let indexPath = collectionView.indexPath(for: cell) else { return }
-    presenter?.toggleVisibilityAtIndex(indexPath.item)
+    presenter.toggleVisibilityAtIndex(indexPath.item)
   }
 }
 
