@@ -1,14 +1,17 @@
 #import "MWMBookmarksManager.h"
 
+#import "MWMBookmark+Core.h"
 #import "MWMBookmarkGroup.h"
 #import "MWMCarPlayBookmarkObject.h"
 #import "MWMCatalogObserver.h"
 #import "MWMTag.h"
 #import "MWMTagGroup+Convenience.h"
+#import "MWMTrack+Core.h"
 #import "MWMUTM+Core.h"
 
 #include "Framework.h"
 
+#include "map/bookmarks_search_params.hpp"
 #include "map/purchase.hpp"
 
 #include "partners_api/utm.hpp"
@@ -70,6 +73,7 @@ static kml::PredefinedColor convertBookmarkColor(MWMBookmarkColor bookmarkColor)
 @property(nonatomic) NSHashTable<id<MWMBookmarksObserver>> * observers;
 @property(nonatomic) BOOL areBookmarksLoaded;
 @property(nonatomic) NSURL * shareCategoryURL;
+@property(nonatomic) NSInteger lastSearchId;
 
 @property(nonatomic) NSMutableDictionary<NSString *, MWMCatalogObserver*> * catalogObservers;
 
@@ -448,6 +452,45 @@ static kml::PredefinedColor convertBookmarkColor(MWMBookmarkColor bookmarkColor)
   }];
 }
 
+- (NSArray<MWMBookmark *> *)bookmarksForGroup:(MWMMarkGroupID)groupId {
+  auto const &bookmarkIds = self.bm.GetUserMarkIds(groupId);
+  NSMutableArray *result = [NSMutableArray array];
+  for (auto bookmarkId : bookmarkIds) {
+    [result addObject:[[MWMBookmark alloc] initWithMarkId:bookmarkId bookmarkData:self.bm.GetBookmark(bookmarkId)]];
+  }
+  return [result copy];
+}
+
+- (void)searchBookmarksGroup:(MWMMarkGroupID)groupId
+                        text:(NSString *)text
+                  completion:(SearchBookmarksCompletionBlock)completion {
+  search::BookmarksSearchParams searchParams;
+  searchParams.m_query = text.UTF8String;
+  searchParams.m_groupId = groupId;
+
+  auto const searchId = ++self.lastSearchId;
+  __weak auto weakSelf = self;
+  searchParams.m_onStarted = [] {};
+  searchParams.m_onResults = [weakSelf, searchId, completion](search::BookmarksSearchParams::Results const &results,
+                                                              search::BookmarksSearchParams::Status status) {
+    __strong auto self = weakSelf;
+    if (!self || searchId != self.lastSearchId)
+      return;
+
+    auto filteredResults = results;
+    self.bm.FilterInvalidBookmarks(filteredResults);
+
+    NSMutableArray *result = [NSMutableArray array];
+    for (auto bookmarkId : filteredResults)
+      [result addObject:[[MWMBookmark alloc] initWithMarkId:bookmarkId bookmarkData:self.bm.GetBookmark(bookmarkId)]];
+
+    completion([result copy]);
+  };
+
+  GetFramework().GetSearchAPI().SearchInBookmarks(searchParams);
+}
+
+
 #pragma mark - Tracks
 
 - (MWMTrackIDCollection)trackIdsForCategory:(MWMMarkGroupID)categoryId {
@@ -456,6 +499,15 @@ static kml::PredefinedColor convertBookmarkColor(MWMBookmarkColor bookmarkColor)
   for (auto trackId : trackIds)
     [collection addObject:@(trackId)];
   return [collection copy];
+}
+
+- (NSArray<MWMTrack *> *)tracksForGroup:(MWMMarkGroupID)groupId {
+  auto const &trackIds = self.bm.GetTrackIds(groupId);
+  NSMutableArray *result = [NSMutableArray array];
+  for (auto trackId : trackIds) {
+    [result addObject:[[MWMTrack alloc] initWithTrackId:trackId trackData:self.bm.GetTrack(trackId)]];
+  }
+  return [result copy];
 }
 
 #pragma mark - Category sharing

@@ -5,16 +5,19 @@
 #import "MWMUTM.h"
 #import "PlacePageBookmarkData.h"
 
+@class MWMBookmark;
 @class MWMBookmarkGroup;
 @class MWMCarPlayBookmarkObject;
 @class MWMTagGroup;
 @class MWMTag;
+@class MWMTrack;
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^LoadTagsCompletionBlock)(NSArray<MWMTagGroup *> * _Nullable tags, NSInteger maxTagsNumber);
 typedef void (^PingCompletionBlock)(BOOL success);
 typedef void (^ElevationPointChangedBlock)(double distance);
+typedef void (^SearchBookmarksCompletionBlock)(NSArray<MWMBookmark *> *bookmarks);
 
 NS_SWIFT_NAME(BookmarksManager)
 @interface MWMBookmarksManager : NSObject
@@ -53,6 +56,11 @@ NS_SWIFT_NAME(BookmarksManager)
 - (NSArray<MWMCarPlayBookmarkObject *> *)bookmarksForCategory:(MWMMarkGroupID)categoryId;
 - (MWMMarkIDCollection)bookmarkIdsForCategory:(MWMMarkGroupID)categoryId;
 - (void)deleteBookmark:(MWMMarkID)bookmarkId;
+- (NSArray<MWMBookmark *> *)bookmarksForGroup:(MWMMarkGroupID)groupId;
+- (NSArray<MWMTrack *> *)tracksForGroup:(MWMMarkGroupID)groupId;
+- (void)searchBookmarksGroup:(MWMMarkGroupID)groupId
+                        text:(NSString *)text
+                  completion:(SearchBookmarksCompletionBlock)completion;
 
 - (MWMTrackIDCollection)trackIdsForCategory:(MWMMarkGroupID)categoryId;
 

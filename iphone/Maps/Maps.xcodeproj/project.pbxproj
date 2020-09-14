@@ -407,6 +407,19 @@
 		47C8789A22DF622400A772DA /* SubscriptionFailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47C8789822DF622400A772DA /* SubscriptionFailViewController.xib */; };
 		47C8789D22DF662700A772DA /* SubscriptionExpiredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C8789B22DF662700A772DA /* SubscriptionExpiredViewController.swift */; };
 		47C8789E22DF662700A772DA /* SubscriptionExpiredViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47C8789C22DF662700A772DA /* SubscriptionExpiredViewController.xib */; };
+		47CA68D12500435E00671019 /* BookmarksListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68CF2500435D00671019 /* BookmarksListViewController.swift */; };
+		47CA68D22500435E00671019 /* BookmarksListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47CA68D02500435D00671019 /* BookmarksListViewController.xib */; };
+		47CA68D4250043C000671019 /* BookmarksListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68D3250043C000671019 /* BookmarksListPresenter.swift */; };
+		47CA68D62500448D00671019 /* BookmarksListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68D52500448D00671019 /* BookmarksListInteractor.swift */; };
+		47CA68D8250044C500671019 /* BookmarksListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68D7250044C500671019 /* BookmarksListRouter.swift */; };
+		47CA68DA2500469400671019 /* BookmarksListBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68D92500469400671019 /* BookmarksListBuilder.swift */; };
+		47CA68F1250B54AF00671019 /* BookmarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68EF250B54AE00671019 /* BookmarkCell.swift */; };
+		47CA68F2250B54AF00671019 /* BookmarkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47CA68F0250B54AE00671019 /* BookmarkCell.xib */; };
+		47CA68F5250B550C00671019 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68F3250B550C00671019 /* TrackCell.swift */; };
+		47CA68F6250B550C00671019 /* TrackCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47CA68F4250B550C00671019 /* TrackCell.xib */; };
+		47CA68F8250F8AB700671019 /* BookmarksListSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68F7250F8AB600671019 /* BookmarksListSectionHeader.swift */; };
+		47CA68FA250F8AD100671019 /* BookmarksListSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47CA68F9250F8AD100671019 /* BookmarksListSectionHeader.xib */; };
+		47CA68FC250F99E500671019 /* BookmarksListCellStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA68FB250F99E500671019 /* BookmarksListCellStrategy.swift */; };
 		47CF2E6123BA090400D11C30 /* FacilitiesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CF2E6023BA090400D11C30 /* FacilitiesController.swift */; };
 		47CF2E6323BA0DD500D11C30 /* CopyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CF2E6223BA0DD500D11C30 /* CopyLabel.swift */; };
 		47D0026721999DA900F651A2 /* PendingTransactionsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D0026621999DA900F651A2 /* PendingTransactionsHandler.swift */; };
@@ -1558,6 +1571,19 @@
 		47C8789822DF622400A772DA /* SubscriptionFailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubscriptionFailViewController.xib; sourceTree = "<group>"; };
 		47C8789B22DF662700A772DA /* SubscriptionExpiredViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionExpiredViewController.swift; sourceTree = "<group>"; };
 		47C8789C22DF662700A772DA /* SubscriptionExpiredViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubscriptionExpiredViewController.xib; sourceTree = "<group>"; };
+		47CA68CF2500435D00671019 /* BookmarksListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksListViewController.swift; sourceTree = "<group>"; };
+		47CA68D02500435D00671019 /* BookmarksListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookmarksListViewController.xib; sourceTree = "<group>"; };
+		47CA68D3250043C000671019 /* BookmarksListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksListPresenter.swift; sourceTree = "<group>"; };
+		47CA68D52500448D00671019 /* BookmarksListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksListInteractor.swift; sourceTree = "<group>"; };
+		47CA68D7250044C500671019 /* BookmarksListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksListRouter.swift; sourceTree = "<group>"; };
+		47CA68D92500469400671019 /* BookmarksListBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksListBuilder.swift; sourceTree = "<group>"; };
+		47CA68EF250B54AE00671019 /* BookmarkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkCell.swift; sourceTree = "<group>"; };
+		47CA68F0250B54AE00671019 /* BookmarkCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookmarkCell.xib; sourceTree = "<group>"; };
+		47CA68F3250B550C00671019 /* TrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
+		47CA68F4250B550C00671019 /* TrackCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackCell.xib; sourceTree = "<group>"; };
+		47CA68F7250F8AB600671019 /* BookmarksListSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksListSectionHeader.swift; sourceTree = "<group>"; };
+		47CA68F9250F8AD100671019 /* BookmarksListSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookmarksListSectionHeader.xib; sourceTree = "<group>"; };
+		47CA68FB250F99E500671019 /* BookmarksListCellStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksListCellStrategy.swift; sourceTree = "<group>"; };
 		47CF2E6023BA090400D11C30 /* FacilitiesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilitiesController.swift; sourceTree = "<group>"; };
 		47CF2E6223BA0DD500D11C30 /* CopyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyLabel.swift; sourceTree = "<group>"; };
 		47D0026621999DA900F651A2 /* PendingTransactionsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingTransactionsHandler.swift; sourceTree = "<group>"; };
@@ -3589,6 +3615,34 @@
 			path = Dialogs;
 			sourceTree = "<group>";
 		};
+		47CA68CE2500425900671019 /* BookmarksList */ = {
+			isa = PBXGroup;
+			children = (
+				47CA68EE250B545C00671019 /* Cells */,
+				47CA68CF2500435D00671019 /* BookmarksListViewController.swift */,
+				47CA68D02500435D00671019 /* BookmarksListViewController.xib */,
+				47CA68D3250043C000671019 /* BookmarksListPresenter.swift */,
+				47CA68D52500448D00671019 /* BookmarksListInteractor.swift */,
+				47CA68D7250044C500671019 /* BookmarksListRouter.swift */,
+				47CA68D92500469400671019 /* BookmarksListBuilder.swift */,
+			);
+			path = BookmarksList;
+			sourceTree = "<group>";
+		};
+		47CA68EE250B545C00671019 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				47CA68FB250F99E500671019 /* BookmarksListCellStrategy.swift */,
+				47CA68EF250B54AE00671019 /* BookmarkCell.swift */,
+				47CA68F0250B54AE00671019 /* BookmarkCell.xib */,
+				47CA68F3250B550C00671019 /* TrackCell.swift */,
+				47CA68F4250B550C00671019 /* TrackCell.xib */,
+				47CA68F7250F8AB600671019 /* BookmarksListSectionHeader.swift */,
+				47CA68F9250F8AD100671019 /* BookmarksListSectionHeader.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		47E3C7232111E2F8008B3B27 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
@@ -5021,6 +5075,7 @@
 			isa = PBXGroup;
 			children = (
 				991A726D250F6C320075348C /* GuideDescription */,
+				47CA68CE2500425900671019 /* BookmarksList */,
 				B32FE73D20D283D600EF7446 /* Catalog */,
 				FA36B80515403A4F004560CC /* BookmarksVC.h */,
 				FA36B80615403A4F004560CC /* BookmarksVC.mm */,
@@ -5175,6 +5230,7 @@
 				CD4A1F1C230EB43B00F2A6B6 /* CatalogConnectionErrorView.xib in Resources */,
 				F65D1E1A20E4F11600FE31DD /* ugc_migration in Resources */,
 				4554B6EE1E55F0F30084017F /* drules_proto_vehicle_dark.bin in Resources */,
+				47CA68D22500435E00671019 /* BookmarksListViewController.xib in Resources */,
 				34AB66141FC5AA320078E451 /* MWMNavigationInfoView.xib in Resources */,
 				F61757E91FC72CDE000AD0D0 /* DiscoverySpinnerCell.xib in Resources */,
 				340E1EEC1E2F614400CE49BF /* Authorization.storyboard in Resources */,
@@ -5249,6 +5305,7 @@
 				F6E2FD6E1E097BA00083EBEC /* MWMMapDownloaderSubplaceTableViewCell.xib in Resources */,
 				3477528B1F725002000D46A3 /* UGCAddReviewRatingCell.xib in Resources */,
 				471C448D2322A7C800C307EC /* SubscriptionGoToCatalogViewController.xib in Resources */,
+				47CA68FA250F8AD100671019 /* BookmarksListSectionHeader.xib in Resources */,
 				F6E2FD741E097BA00083EBEC /* MWMMapDownloaderTableViewCell.xib in Resources */,
 				349A13851DEC138C00C7DB60 /* MWMMobileInternetAlert.xib in Resources */,
 				34D3B04B1E389D05004100F9 /* MWMNoteCell.xib in Resources */,
@@ -5261,9 +5318,11 @@
 				F6E2FDFB1E097BA00083EBEC /* MWMOpeningHoursAllDayTableViewCell.xib in Resources */,
 				342639361EA0E60A0025EB89 /* local_ads_symbols.txt in Resources */,
 				4554B6EC1E55F0EF0084017F /* drules_proto_vehicle_clear.bin in Resources */,
+				47CA68F2250B54AF00671019 /* BookmarkCell.xib in Resources */,
 				479D305722C627CB00D18278 /* PartnerBannerViewController.xib in Resources */,
 				337F98A321D37B5800C8AC27 /* SearchHistoryViewController.xib in Resources */,
 				F6E2FE761E097BA00083EBEC /* MWMOpeningHoursCell.xib in Resources */,
+				47CA68F6250B550C00671019 /* TrackCell.xib in Resources */,
 				34AB66351FC5AA330078E451 /* RouteManagerCell.xib in Resources */,
 				33BCD61621777A7400CA30B4 /* BookmarksSharingFlow.storyboard in Resources */,
 				F6E2FE011E097BA00083EBEC /* MWMOpeningHoursClosedSpanTableViewCell.xib in Resources */,
@@ -5558,6 +5617,7 @@
 				3404F49D2028A2430090E401 /* BMCActionsCreateCell.swift in Sources */,
 				F6E2FD8F1E097BA00083EBEC /* MWMNoMapsViewController.mm in Sources */,
 				993DF12C23F6BDB100AC231A /* Theme.swift in Sources */,
+				47CA68D8250044C500671019 /* BookmarksListRouter.swift in Sources */,
 				F63AF50B1EA6213F00A1DB98 /* FilterRatingCell.swift in Sources */,
 				34D3B0421E389D05004100F9 /* MWMEditorTextTableViewCell.m in Sources */,
 				99F3EB1223F418C900C713F8 /* PlacePageInteractor.swift in Sources */,
@@ -5689,6 +5749,7 @@
 				99A906E523F6F7030005872B /* ActionBarViewController.swift in Sources */,
 				47B9065421C7FA400079C85E /* UIImageView+WebImage.m in Sources */,
 				F6E2FF481E097BA00083EBEC /* SettingsTableViewSelectableCell.swift in Sources */,
+				47CA68D4250043C000671019 /* BookmarksListPresenter.swift in Sources */,
 				34BBD6581F826F810070CA50 /* AuthorizationTransitioningManager.swift in Sources */,
 				33F7668F21A57CDF00A88B16 /* EditOnWebViewController.swift in Sources */,
 				B366130A20D5E2E000E7DC3E /* CatalogCategoryCell.swift in Sources */,
@@ -5756,6 +5817,7 @@
 				6741A9E71BF340DE002C974C /* MWMCircularProgressView.m in Sources */,
 				34AC8FDB1EFC07FE00E7F910 /* UILabel+NumberOfVisibleLines.swift in Sources */,
 				9959C75C24599CCD008FD4FD /* DirectionView.swift in Sources */,
+				47CA68D62500448D00671019 /* BookmarksListInteractor.swift in Sources */,
 				99B6A77F23684573002C94CB /* PromoDiscoveryBuilder.swift in Sources */,
 				4767CD9F20AAD48A00BD8166 /* Checkmark.swift in Sources */,
 				33E905462180C40900868CAC /* UIViewController+Authorization.swift in Sources */,
@@ -5797,6 +5859,7 @@
 				479603732446F17C00F3BDD0 /* User+AppleId.swift in Sources */,
 				993DF0CB23F6BD0600AC231A /* ElevationDetailsRouter.swift in Sources */,
 				6741A9F51BF340DE002C974C /* BookmarksVC.mm in Sources */,
+				47CA68FC250F99E500671019 /* BookmarksListCellStrategy.swift in Sources */,
 				B33D21B820E130D000BAD749 /* BookmarksTabViewController.swift in Sources */,
 				3358607E217632A2006D11F2 /* BookmarksSharingViewController.swift in Sources */,
 				99CB34C5236B00FD001D28AD /* WelcomeStorage.swift in Sources */,
@@ -5915,8 +5978,11 @@
 				9948ADB424E14517003A826A /* PartnerBannerBuilder.swift in Sources */,
 				F6E2FED91E097BA00083EBEC /* MWMSearchContentView.m in Sources */,
 				99EBF73024B4C89000FE1F1F /* AllPassSubscriptionBuilder.swift in Sources */,
+				47CA68F5250B550C00671019 /* TrackCell.swift in Sources */,
+				47CA68F8250F8AB700671019 /* BookmarksListSectionHeader.swift in Sources */,
 				F6BD1D211CA412920047B8E8 /* MWMOsmAuthAlert.mm in Sources */,
 				47CF2E6323BA0DD500D11C30 /* CopyLabel.swift in Sources */,
+				47CA68D12500435E00671019 /* BookmarksListViewController.swift in Sources */,
 				34AB66321FC5AA330078E451 /* RouteManagerHeaderView.swift in Sources */,
 				347040301EA6470700038379 /* BorderedButton.swift in Sources */,
 				F6E2FF4B1E097BA00083EBEC /* SettingsTableViewSwitchCell.swift in Sources */,
@@ -5958,6 +6024,7 @@
 				F6E2FE221E097BA00083EBEC /* MWMOpeningHoursEditorViewController.mm in Sources */,
 				999FC12B23ABB4B800B0E6F9 /* FontStyleSheet.swift in Sources */,
 				34943BBB1E2626B200B14F84 /* WelcomePageController.swift in Sources */,
+				47CA68DA2500469400671019 /* BookmarksListBuilder.swift in Sources */,
 				34D3AFE21E376F7E004100F9 /* UITableView+Updates.swift in Sources */,
 				3404164C1E7BF42E00E2B6D6 /* UIView+Coordinates.swift in Sources */,
 				993F5510237C622700545511 /* DeepLinkRouteStrategy.swift in Sources */,
@@ -5974,6 +6041,7 @@
 				47E3C7332111F4D8008B3B27 /* CoverVerticalDismissalAnimator.swift in Sources */,
 				99E2B01E23698B0800FFABC5 /* WelcomeProtocols.swift in Sources */,
 				471AB99423ABA3BD00F56D49 /* SearchMapsDataSource.swift in Sources */,
+				47CA68F1250B54AF00671019 /* BookmarkCell.swift in Sources */,
 				993F550F237C622700545511 /* DeepLinkMapStrategy.swift in Sources */,
 				471A7BC02481C82500A0D4C1 /* BookmarkTitleCell.swift in Sources */,
 				34AB661A1FC5AA330078E451 /* MWMTaxiCollectionLayout.m in Sources */,
