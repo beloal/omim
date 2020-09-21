@@ -115,6 +115,8 @@
 		47EEAFF72350D060005CF316 /* MWMCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 47EEAFF52350CEF6005CF316 /* MWMCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		47EF73F9246E035C00D32AB8 /* MWMGuidesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 47EF73F7246E035C00D32AB8 /* MWMGuidesManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		47EF73FA246E035C00D32AB8 /* MWMGuidesManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47EF73F8246E035C00D32AB8 /* MWMGuidesManager.mm */; };
+		47F0D2152516847F00BC685E /* MWMBookmarksSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 47F0D2132516847F00BC685E /* MWMBookmarksSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		47F0D2162516847F00BC685E /* MWMBookmarksSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F0D2142516847F00BC685E /* MWMBookmarksSection.m */; };
 		47F4F1F923A3336C0022FD56 /* MWMMapNodeAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 47F4F1F723A3336B0022FD56 /* MWMMapNodeAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		47F4F1FA23A3336C0022FD56 /* MWMMapNodeAttributes.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47F4F1F823A3336C0022FD56 /* MWMMapNodeAttributes.mm */; };
 		47F4F1FD23A3D1AC0022FD56 /* MWMMapNodeAttributes+Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 47F4F1FB23A3D1AC0022FD56 /* MWMMapNodeAttributes+Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -266,6 +268,8 @@
 		47EEAFF52350CEF6005CF316 /* MWMCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWMCommon.h; sourceTree = "<group>"; };
 		47EF73F7246E035C00D32AB8 /* MWMGuidesManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWMGuidesManager.h; sourceTree = "<group>"; };
 		47EF73F8246E035C00D32AB8 /* MWMGuidesManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MWMGuidesManager.mm; sourceTree = "<group>"; };
+		47F0D2132516847F00BC685E /* MWMBookmarksSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWMBookmarksSection.h; sourceTree = "<group>"; };
+		47F0D2142516847F00BC685E /* MWMBookmarksSection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MWMBookmarksSection.m; sourceTree = "<group>"; };
 		47F4F1F723A3336B0022FD56 /* MWMMapNodeAttributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWMMapNodeAttributes.h; sourceTree = "<group>"; };
 		47F4F1F823A3336C0022FD56 /* MWMMapNodeAttributes.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MWMMapNodeAttributes.mm; sourceTree = "<group>"; };
 		47F4F1FB23A3D1AC0022FD56 /* MWMMapNodeAttributes+Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MWMMapNodeAttributes+Core.h"; sourceTree = "<group>"; };
@@ -548,6 +552,8 @@
 				47CA68E62506F61300671019 /* MWMTrack.h */,
 				47CA68EA2506F6F100671019 /* MWMTrack+Core.h */,
 				47CA68E72506F61300671019 /* MWMTrack.mm */,
+				47F0D2132516847F00BC685E /* MWMBookmarksSection.h */,
+				47F0D2142516847F00BC685E /* MWMBookmarksSection.m */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -767,6 +773,7 @@
 				47F701EF238C86F000D18E95 /* PlacePageButtonsData.h in Headers */,
 				47942DAE2382ABE100DEFAE3 /* UgcSummaryRating.h in Headers */,
 				47EEAFF72350D060005CF316 /* MWMCommon.h in Headers */,
+				47F0D2152516847F00BC685E /* MWMBookmarksSection.h in Headers */,
 				47CA68E82506F61300671019 /* MWMTrack.h in Headers */,
 				472602A824092C5B00731135 /* MWMGeoUtil.h in Headers */,
 				47D9019523AC22E500D9364C /* MWMMapUpdateInfo.h in Headers */,
@@ -925,6 +932,7 @@
 				47942D6C237CC3DE00DEFAE3 /* PlacePageData.mm in Sources */,
 				47942DAF2382ABE100DEFAE3 /* UgcSummaryRating.mm in Sources */,
 				479F705E234FBB8C00011E2E /* MWMBookmarkGroup.m in Sources */,
+				47F0D2162516847F00BC685E /* MWMBookmarksSection.m in Sources */,
 				479834EB2342697400724D1E /* MWMTagGroup+Convenience.mm in Sources */,
 				47EF73FA246E035C00D32AB8 /* MWMGuidesManager.mm in Sources */,
 				470016082342541100EBF03D /* MWMTagGroup.m in Sources */,

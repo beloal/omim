@@ -5,8 +5,10 @@
 #import "MWMUTM.h"
 #import "PlacePageBookmarkData.h"
 
+@class CLLocation;
 @class MWMBookmark;
 @class MWMBookmarkGroup;
+@class MWMBookmarksSection;
 @class MWMCarPlayBookmarkObject;
 @class MWMTagGroup;
 @class MWMTag;
@@ -14,10 +16,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, MWMBookmarksSortingType) {
+  MWMBookmarksSortingTypeByType,
+  MWMBookmarksSortingTypeByDistance,
+  MWMBookmarksSortingTypeByTime
+} NS_SWIFT_NAME(BookmarksSortingType);
+
 typedef void (^LoadTagsCompletionBlock)(NSArray<MWMTagGroup *> * _Nullable tags, NSInteger maxTagsNumber);
 typedef void (^PingCompletionBlock)(BOOL success);
 typedef void (^ElevationPointChangedBlock)(double distance);
 typedef void (^SearchBookmarksCompletionBlock)(NSArray<MWMBookmark *> *bookmarks);
+typedef void (^SortBookmarksCompletionBlock)(NSArray<MWMBookmarksSection *> * _Nullable sortedSections);
 
 NS_SWIFT_NAME(BookmarksManager)
 @interface MWMBookmarksManager : NSObject
@@ -52,6 +61,11 @@ NS_SWIFT_NAME(BookmarksManager)
 - (void)setCatalogCategoriesVisible:(BOOL)isVisible;
 - (void)deleteCategory:(MWMMarkGroupID)groupId;
 - (BOOL)checkCategoryName:(NSString *)name;
+- (NSArray<NSNumber *> *)availableSortingTypes:(MWMMarkGroupID)groupId hasMyPosition:(BOOL)hasMyPosition;
+- (void)sortBookmarks:(MWMMarkGroupID)groupId
+          sortingType:(MWMBookmarksSortingType)sortingType
+             location:(CLLocation * _Nullable)location
+           completion:(SortBookmarksCompletionBlock)completionBlock;
 
 - (NSArray<MWMCarPlayBookmarkObject *> *)bookmarksForCategory:(MWMMarkGroupID)categoryId;
 - (MWMMarkIDCollection)bookmarkIdsForCategory:(MWMMarkGroupID)categoryId;

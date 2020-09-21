@@ -35,9 +35,17 @@ protocol ITrackViewModel {
   var image: UIImage { get }
 }
 
+protocol IBookmarksListMenuItem {
+  var title: String { get }
+  var destructive: Bool { get }
+  var action: () -> Void { get }
+}
+
 protocol IBookmarksListView: AnyObject {
   func setTitle(_ title: String)
   func setSections(_ sections: [IBookmarksListSectionViewModel])
+  func setMoreItemTitle(_ itemTitle: String)
+  func showMenu(_ items: [IBookmarksListMenuItem])
 }
 
 final class BookmarksListViewController: MWMViewController {
@@ -56,9 +64,23 @@ final class BookmarksListViewController: MWMViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    let toolbarItemAttributes = [NSAttributedString.Key.font: UIFont.medium16(),
+                                 NSAttributedString.Key.foregroundColor: UIColor.linkBlue()]
+
+    sortToolbarItem.setTitleTextAttributes(toolbarItemAttributes, for: .normal)
+    moreToolbarItem.setTitleTextAttributes(toolbarItemAttributes, for: .normal)
+    sortToolbarItem.title = L("sort")
     searchBar.placeholder = L("search_in_the_list")
     cellStrategy.registerCells(tableView)
     presenter.viewDidLoad()
+  }
+
+  @IBAction func onSortItem(_ sender: UIBarButtonItem) {
+    presenter.sort()
+  }
+
+  @IBAction func onMoreItem(_ sender: UIBarButtonItem) {
+    presenter.more()
   }
 }
 
@@ -126,5 +148,21 @@ extension BookmarksListViewController: IBookmarksListView {
   func setSections(_ sections: [IBookmarksListSectionViewModel]) {
     self.sections = sections
     tableView.reloadData()
+  }
+
+  func setMoreItemTitle(_ itemTitle: String) {
+    moreToolbarItem.title = itemTitle
+  }
+
+  func showMenu(_ items: [IBookmarksListMenuItem]) {
+    let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    items.forEach { item in
+      let action = UIAlertAction(title: item.title, style: item.destructive ? .destructive : .default) { _ in
+        item.action()
+      }
+      actionSheet.addAction(action)
+    }
+    actionSheet.addAction(UIAlertAction(title: L("cancel"), style: .cancel, handler: nil))
+    present(actionSheet, animated: true)
   }
 }

@@ -4,6 +4,8 @@ protocol IBookmarksListPresenter {
   func deactivateSearch()
   func cancelSearch()
   func search(_ text: String)
+  func sort()
+  func more()
 }
 
 final class BookmarksListPresenter {
@@ -60,12 +62,78 @@ final class BookmarksListPresenter {
     let measurement = Measurement(value: distanceInUnits.rounded(), unit: unit)
     return distanceFormatter.string(from: measurement)
   }
+
+  private func showSortMenu() {
+    var sortItems = interactor.availableSortingTypes(hasMyPosition: LocationManager.lastLocation() != nil)
+      .map { sortingType -> BookmarksListMenuItem in
+        switch sortingType {
+        case .distance:
+          return BookmarksListMenuItem(title: L("sort_distance"), action: { [weak self] in
+            self?.sort(.distance)
+          })
+        case .date:
+          return BookmarksListMenuItem(title: L("sort_date"), action: { [weak self] in
+            self?.sort(.date)
+          })
+        case .type:
+          return BookmarksListMenuItem(title: L("sort_type"), action: { [weak self] in
+            self?.sort(.type)
+          })
+        }
+    }
+    sortItems.append(BookmarksListMenuItem(title: L("sort_default"), action: { [weak self] in
+      self?.setDefaultSections()
+    }))
+    view.showMenu(sortItems)
+  }
+
+  private func showMoreMenu() {
+    var moreItems: [BookmarksListMenuItem] = []
+    moreItems.append(BookmarksListMenuItem(title: L("sharing_options"), action: { [weak self] in
+      self?.router.sharingOptions()
+    }))
+    moreItems.append(BookmarksListMenuItem(title: L("search_show_on_map"), action: { [weak self] in
+      self?.viewOnMap()
+    }))
+    moreItems.append(BookmarksListMenuItem(title: L("list_settings"), action: { [weak self] in
+      self?.router.listSettings()
+    }))
+    moreItems.append(BookmarksListMenuItem(title: L("export_file"), action: { [weak self] in
+
+    }))
+    moreItems.append(BookmarksListMenuItem(title: L("delete_list"), destructive: true, action: { [weak self] in
+
+    }))
+    view.showMenu(moreItems)
+  }
+
+  private func viewOnMap() {
+    interactor.viewOnMap()
+  }
+
+  private func sort(_ sortingType: BookmarksListSortingType) {
+    interactor.sort(sortingType, location: LocationManager.lastLocation()) { [weak self] sortedSections in
+      let sections = sortedSections.map { (bookmarksSection) -> IBookmarksListSectionViewModel in
+        if let bookmarks = bookmarksSection.bookmarks, let self = self {
+          return BookmarksSectionViewModel(title: bookmarksSection.sectionName, bookmarks: self.mapBookmarks(bookmarks))
+        }
+        if let tracks = bookmarksSection.tracks, let self = self {
+          return TracksSectionViewModel(tracks: tracks.map { track in
+            TrackViewModel(track, formattedDistance: self.formatDistance(Double(track.trackLength)))
+          })
+        }
+        fatalError()
+      }
+      self?.view.setSections(sections)
+    }
+  }
 }
 
 extension BookmarksListPresenter: IBookmarksListPresenter {
   func viewDidLoad() {
     setDefaultSections()
     view.setTitle(interactor.getTitle())
+    view.setMoreItemTitle(interactor.isEditable() ? L("placepage_more_button") : L("view_on_map_bookmarks"))
   }
 
   func activateSearch() {
@@ -87,6 +155,18 @@ extension BookmarksListPresenter: IBookmarksListPresenter {
       self.view.setSections(bookmarks.isEmpty ? [] : [BookmarksSectionViewModel(title: L("bookmarks"),
                                                                                  bookmarks: bookmarks)])
     }
+  }
+
+  func more() {
+    if interactor.isEditable() {
+      showMoreMenu()
+    } else {
+      viewOnMap()
+    }
+  }
+
+  func sort() {
+    showSortMenu()
   }
 }
 
@@ -139,5 +219,17 @@ fileprivate struct TracksSectionViewModel: ITracksSectionViewModel {
 
   init(tracks: [ITrackViewModel]) {
     self.tracks = tracks
+  }
+}
+
+fileprivate struct BookmarksListMenuItem: IBookmarksListMenuItem {
+  let title: String
+  let destructive: Bool
+  let action: () -> Void
+
+  init(title: String, destructive: Bool = false, action: @escaping () -> Void) {
+    self.title = title
+    self.destructive = destructive
+    self.action = action
   }
 }

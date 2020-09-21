@@ -1,6 +1,7 @@
 #import "MWMBookmarksManager.h"
 
 #import "MWMBookmark+Core.h"
+#import "MWMBookmarksSection.h"
 #import "MWMBookmarkGroup.h"
 #import "MWMCarPlayBookmarkObject.h"
 #import "MWMCatalogObserver.h"
@@ -66,6 +67,28 @@ static kml::PredefinedColor convertBookmarkColor(MWMBookmarkColor bookmarkColor)
   }
 }
 
+static MWMBookmarksSortingType convertSortingType(BookmarkManager::SortingType const &sortingType) {
+  switch (sortingType) {
+    case BookmarkManager::SortingType::ByType:
+      return MWMBookmarksSortingTypeByType;
+    case BookmarkManager::SortingType::ByDistance:
+      return MWMBookmarksSortingTypeByDistance;
+    case BookmarkManager::SortingType::ByTime:
+      return MWMBookmarksSortingTypeByTime;
+  }
+}
+
+static BookmarkManager::SortingType converSortingTypeToCore(MWMBookmarksSortingType sortingType) {
+  switch (sortingType) {
+    case MWMBookmarksSortingTypeByType:
+      return BookmarkManager::SortingType::ByType;
+    case MWMBookmarksSortingTypeByDistance:
+      return BookmarkManager::SortingType::ByDistance;
+    case MWMBookmarksSortingTypeByTime:
+      return BookmarkManager::SortingType::ByTime;
+  }
+}
+
 @interface MWMBookmarksManager ()
 
 @property(nonatomic, readonly) BookmarkManager & bm;
@@ -74,6 +97,7 @@ static kml::PredefinedColor convertBookmarkColor(MWMBookmarkColor bookmarkColor)
 @property(nonatomic) BOOL areBookmarksLoaded;
 @property(nonatomic) NSURL * shareCategoryURL;
 @property(nonatomic) NSInteger lastSearchId;
+@property(nonatomic) NSInteger lastSortId;
 
 @property(nonatomic) NSMutableDictionary<NSString *, MWMCatalogObserver*> * catalogObservers;
 
@@ -419,6 +443,74 @@ static kml::PredefinedColor convertBookmarkColor(MWMBookmarkColor bookmarkColor)
 - (BOOL)checkCategoryName:(NSString *)name
 {
   return !self.bm.IsUsedCategoryName(name.UTF8String);
+}
+
+- (NSArray<NSNumber *> *)availableSortingTypes:(MWMMarkGroupID)groupId hasMyPosition:(BOOL)hasMyPosition{
+  auto const availableTypes = self.bm.GetAvailableSortingTypes(groupId, hasMyPosition);
+  NSMutableArray *result = [NSMutableArray array];
+  for (auto const &sortingType : availableTypes) {
+    [result addObject:[NSNumber numberWithInteger:convertSortingType(sortingType)]];
+  }
+  return [result copy];
+}
+
+- (void)sortBookmarks:(MWMMarkGroupID)groupId
+          sortingType:(MWMBookmarksSortingType)sortingType
+             location:(CLLocation *)location
+           completion:(SortBookmarksCompletionBlock)completion {
+  self.bm.SetLastSortingType(groupId, converSortingTypeToCore(sortingType));
+  m2::PointD myPosition = m2::PointD::Zero();
+
+  if (sortingType == MWMBookmarksSortingTypeByDistance) {
+    if (!location) {
+      completion(nil);
+      return;
+    }
+    myPosition = mercator::FromLatLon(location.coordinate.latitude, location.coordinate.longitude);
+  }
+
+  auto const sortId = ++self.lastSortId;
+  __weak auto weakSelf = self;
+
+  auto &bm = GetFramework().GetBookmarkManager();
+  BookmarkManager::SortParams sortParams;
+  sortParams.m_groupId = groupId;
+  sortParams.m_sortingType = converSortingTypeToCore(sortingType);
+  sortParams.m_hasMyPosition = location != nil;
+  sortParams.m_myPosition = myPosition;
+  sortParams.m_onResults = [weakSelf, sortId, completion] (BookmarkManager::SortedBlocksCollection &&sortedBlocks,
+                                                           BookmarkManager::SortParams::Status status) {
+    __strong auto self = weakSelf;
+    if (!self || sortId != self.lastSortId)
+      return;
+
+    if (status == BookmarkManager::SortParams::Status::Completed) {
+      NSMutableArray *result = [NSMutableArray array];
+      for (auto const &sortedBlock : sortedBlocks) {
+        NSMutableArray *bookmarks = nil;
+        if (sortedBlock.m_markIds.size() > 0) {
+          bookmarks = [NSMutableArray array];
+          for (auto const &markId : sortedBlock.m_markIds) {
+            [bookmarks addObject:[[MWMBookmark alloc] initWithMarkId:markId
+                                                        bookmarkData:self.bm.GetBookmark(markId)]];
+          }
+        }
+        NSMutableArray *tracks = nil;
+        if (sortedBlock.m_trackIds.size() > 0) {
+          tracks = [NSMutableArray array];
+          for (auto const &trackId : sortedBlock.m_trackIds) {
+            [tracks addObject:[[MWMTrack alloc] initWithTrackId:trackId trackData:self.bm.GetTrack(trackId)]];
+          }
+        }
+        [result addObject:[[MWMBookmarksSection alloc] initWithTitle:@(sortedBlock.m_blockName.c_str())
+                                                           bookmarks:bookmarks
+                                                              tracks:tracks]];
+      }
+      completion([result copy]);
+    }
+  };
+
+  bm.GetSortedCategory(sortParams);
 }
 
 #pragma mark - Bookmarks
