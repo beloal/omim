@@ -115,8 +115,6 @@ final class BMCViewController: MWMViewController {
   }
 
   private func openCategory(category: BookmarkGroup) {
-//    let bmViewController = BookmarksVC(category: category.categoryId)
-//    bmViewController.delegate = self
     let bmViewController = BookmarksListBuilder.build(markGroupId: category.categoryId,
                                                       bookmarksCoordinator: coordinator,
                                                       delegate: self)
@@ -389,20 +387,5 @@ extension BMCViewController: BookmarksListDelegate {
   func bookmarksListDidDeleteGroup() {
     guard let parentVC = parent else { return }
     navigationController?.popToViewController(parentVC, animated: true)
-  }
-}
-
-extension BMCViewController: BookmarksVCDelegate {
-  func bookmarksVCdidUpdateCategory(_ viewController: BookmarksVC) {
-    // for now we did necessary interface update in -viewWillAppear
-  }
-
-  func bookmarksVCdidDeleteCategory(_ viewController: BookmarksVC) {
-    guard let parentVC = parent else { return }
-    navigationController?.popToViewController(parentVC, animated: true)
-  }
-
-  func bookmarksVCdidView(onMap viewController: BookmarksVC, categoryId: MWMMarkGroupID) {
-    coordinator?.hide(categoryId: categoryId)
   }
 }

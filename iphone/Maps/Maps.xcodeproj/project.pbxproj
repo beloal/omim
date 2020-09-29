@@ -321,7 +321,6 @@
 		4715273524907F8200E91BBA /* BookmarkColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4715273424907F8200E91BBA /* BookmarkColorViewController.swift */; };
 		471527372491C20500E91BBA /* SelectBookmarkGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471527362491C20500E91BBA /* SelectBookmarkGroupViewController.swift */; };
 		4716EABA21A325310029B886 /* IPaidRouteStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4716EAB921A325310029B886 /* IPaidRouteStatistics.swift */; };
-		4716EAC121A6E0570029B886 /* BookmarksVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4716EAC021A6E0570029B886 /* BookmarksVC.xib */; };
 		4719A643219CB61D009F9AA7 /* BillingPendingTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4719A642219CB61D009F9AA7 /* BillingPendingTransaction.swift */; };
 		4719A645219CBD65009F9AA7 /* IPendingTransactionsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4719A644219CBD65009F9AA7 /* IPendingTransactionsHandler.swift */; };
 		4719A647219CBD7F009F9AA7 /* IBillingPendingTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4719A646219CBD7F009F9AA7 /* IBillingPendingTransaction.swift */; };
@@ -513,7 +512,6 @@
 		6741A9E01BF340DE002C974C /* MWMDownloaderDialogHeader.mm in Sources */ = {isa = PBXBuildFile; fileRef = F64F4B731B4A45FD0081A24A /* MWMDownloaderDialogHeader.mm */; };
 		6741A9E71BF340DE002C974C /* MWMCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 349A35791B53D4C9009677EE /* MWMCircularProgressView.m */; };
 		6741A9EC1BF340DE002C974C /* MWMCircularProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 349A35761B53D4C9009677EE /* MWMCircularProgress.m */; };
-		6741A9F51BF340DE002C974C /* BookmarksVC.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA36B80615403A4F004560CC /* BookmarksVC.mm */; };
 		6741AA031BF340DE002C974C /* MWMActivityViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 340837121B7243CE00B5C185 /* MWMActivityViewController.mm */; };
 		6741AA0B1BF340DE002C974C /* MWMMapViewControlsManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 34BC72111B0DECAE0012A34B /* MWMMapViewControlsManager.mm */; };
 		6741AA191BF340DE002C974C /* MWMDownloaderDialogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F64F4B6C1B46A51F0081A24A /* MWMDownloaderDialogCell.m */; };
@@ -748,8 +746,6 @@
 		B32FE74020D2844600EF7446 /* DownloadedBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32FE73E20D2844600EF7446 /* DownloadedBookmarksViewController.swift */; };
 		B32FE74120D2844600EF7446 /* DownloadedBookmarksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B32FE73F20D2844600EF7446 /* DownloadedBookmarksViewController.xib */; };
 		B32FE74320D2B09600EF7446 /* CatalogWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32FE74220D2B09600EF7446 /* CatalogWebViewController.swift */; };
-		B33D21AC20DA515800BAD749 /* MWMCategoryInfoCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B33D21AA20DA515800BAD749 /* MWMCategoryInfoCell.mm */; };
-		B33D21AD20DA515800BAD749 /* MWMCategoryInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B33D21AB20DA515800BAD749 /* MWMCategoryInfoCell.xib */; };
 		B33D21AF20DAF9F000BAD749 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33D21AE20DAF9F000BAD749 /* Toast.swift */; };
 		B33D21B820E130D000BAD749 /* BookmarksTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33D21B720E130D000BAD749 /* BookmarksTabViewController.swift */; };
 		B366130A20D5E2E000E7DC3E /* CatalogCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B366130820D5E2E000E7DC3E /* CatalogCategoryCell.swift */; };
@@ -762,9 +758,6 @@
 		BB8123CF212C264700ADE512 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB8123CD212C264700ADE512 /* Metal.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BB8123D0212C264700ADE512 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB8123CE212C264700ADE512 /* MetalKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BB8123D62130427E00ADE512 /* MetalContextFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB8123D52130427E00ADE512 /* MetalContextFactory.mm */; };
-		BB87BF8A22FAF1CA008A8A72 /* TracksSection.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB87BF8922FAF1CA008A8A72 /* TracksSection.mm */; };
-		BB87BF8D22FAF435008A8A72 /* InfoSection.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB87BF8C22FAF435008A8A72 /* InfoSection.mm */; };
-		BBED27022292F6C000788143 /* BookmarksSection.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBED27012292F6C000788143 /* BookmarksSection.mm */; };
 		CD08887422B7ABB400C1368D /* MWMDiscoveryCollectionView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CD08887322B7ABB400C1368D /* MWMDiscoveryCollectionView.mm */; };
 		CD4A1F132305872700F2A6B6 /* PromoBookingPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A1F122305872700F2A6B6 /* PromoBookingPresentationController.swift */; };
 		CD4A1F1A230EADC100F2A6B6 /* CatalogConnectionErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A1F19230EADC100F2A6B6 /* CatalogConnectionErrorView.swift */; };
@@ -1472,7 +1465,6 @@
 		4715273424907F8200E91BBA /* BookmarkColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkColorViewController.swift; sourceTree = "<group>"; };
 		471527362491C20500E91BBA /* SelectBookmarkGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectBookmarkGroupViewController.swift; sourceTree = "<group>"; };
 		4716EAB921A325310029B886 /* IPaidRouteStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPaidRouteStatistics.swift; sourceTree = "<group>"; };
-		4716EAC021A6E0570029B886 /* BookmarksVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookmarksVC.xib; sourceTree = "<group>"; };
 		4716EACA21B01C270029B886 /* MWMUGCReviewSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWMUGCReviewSource.h; sourceTree = "<group>"; };
 		4719A642219CB61D009F9AA7 /* BillingPendingTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillingPendingTransaction.swift; sourceTree = "<group>"; };
 		4719A644219CBD65009F9AA7 /* IPendingTransactionsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPendingTransactionsHandler.swift; sourceTree = "<group>"; };
@@ -1901,9 +1893,6 @@
 		B32FE73E20D2844600EF7446 /* DownloadedBookmarksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadedBookmarksViewController.swift; sourceTree = "<group>"; };
 		B32FE73F20D2844600EF7446 /* DownloadedBookmarksViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadedBookmarksViewController.xib; sourceTree = "<group>"; };
 		B32FE74220D2B09600EF7446 /* CatalogWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogWebViewController.swift; sourceTree = "<group>"; };
-		B33D21A920DA515800BAD749 /* MWMCategoryInfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWMCategoryInfoCell.h; sourceTree = "<group>"; };
-		B33D21AA20DA515800BAD749 /* MWMCategoryInfoCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MWMCategoryInfoCell.mm; sourceTree = "<group>"; };
-		B33D21AB20DA515800BAD749 /* MWMCategoryInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MWMCategoryInfoCell.xib; sourceTree = "<group>"; };
 		B33D21AE20DAF9F000BAD749 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		B33D21B720E130D000BAD749 /* BookmarksTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTabViewController.swift; sourceTree = "<group>"; };
 		B366130820D5E2E000E7DC3E /* CatalogCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogCategoryCell.swift; sourceTree = "<group>"; };
@@ -1917,13 +1906,6 @@
 		BB8123CE212C264700ADE512 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		BB8123D42130427E00ADE512 /* MetalContextFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalContextFactory.h; sourceTree = "<group>"; };
 		BB8123D52130427E00ADE512 /* MetalContextFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalContextFactory.mm; sourceTree = "<group>"; };
-		BB87BF8722FAEC82008A8A72 /* TableSectionDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableSectionDataSource.h; sourceTree = "<group>"; };
-		BB87BF8822FAF125008A8A72 /* TracksSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TracksSection.h; sourceTree = "<group>"; };
-		BB87BF8922FAF1CA008A8A72 /* TracksSection.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TracksSection.mm; sourceTree = "<group>"; };
-		BB87BF8B22FAF3B8008A8A72 /* InfoSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoSection.h; sourceTree = "<group>"; };
-		BB87BF8C22FAF435008A8A72 /* InfoSection.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = InfoSection.mm; sourceTree = "<group>"; };
-		BBED27002292F42000788143 /* BookmarksSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookmarksSection.h; sourceTree = "<group>"; };
-		BBED27012292F6C000788143 /* BookmarksSection.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BookmarksSection.mm; sourceTree = "<group>"; };
 		CD08887222B7ABB400C1368D /* MWMDiscoveryCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWMDiscoveryCollectionView.h; sourceTree = "<group>"; };
 		CD08887322B7ABB400C1368D /* MWMDiscoveryCollectionView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MWMDiscoveryCollectionView.mm; sourceTree = "<group>"; };
 		CD08888322BCF1C800C1368D /* maps.me rel.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "maps.me rel.entitlements"; sourceTree = "<group>"; };
@@ -2225,8 +2207,6 @@
 		F6FE3C3A1CC5106500A73196 /* MWMPlaceDoesntExistAlert.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MWMPlaceDoesntExistAlert.xib; sourceTree = "<group>"; };
 		F6FEA82B1C58E89B007223CC /* MWMButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWMButton.h; sourceTree = "<group>"; };
 		F6FEA82C1C58E89B007223CC /* MWMButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWMButton.m; sourceTree = "<group>"; };
-		FA36B80515403A4F004560CC /* BookmarksVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = BookmarksVC.h; path = Bookmarks/BookmarksVC.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FA36B80615403A4F004560CC /* BookmarksVC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = BookmarksVC.mm; path = Bookmarks/BookmarksVC.mm; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FA459EB314327AF700B5BB3C /* WorldCoasts.mwm */ = {isa = PBXFileReference; lastKnownFileType = file; name = WorldCoasts.mwm; path = ../../data/WorldCoasts.mwm; sourceTree = "<group>"; };
 		FA46DA2B12D4166E00968C36 /* countries.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = countries.txt; path = ../../data/countries.txt; sourceTree = SOURCE_ROOT; };
 		FA64D9A813F975AD00350ECF /* types.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = types.txt; path = ../../data/types.txt; sourceTree = SOURCE_ROOT; };
@@ -5077,21 +5057,8 @@
 				991A726D250F6C320075348C /* GuideDescription */,
 				47CA68CE2500425900671019 /* BookmarksList */,
 				B32FE73D20D283D600EF7446 /* Catalog */,
-				FA36B80515403A4F004560CC /* BookmarksVC.h */,
-				FA36B80615403A4F004560CC /* BookmarksVC.mm */,
-				4716EAC021A6E0570029B886 /* BookmarksVC.xib */,
-				B33D21A920DA515800BAD749 /* MWMCategoryInfoCell.h */,
-				B33D21AA20DA515800BAD749 /* MWMCategoryInfoCell.mm */,
-				B33D21AB20DA515800BAD749 /* MWMCategoryInfoCell.xib */,
 				3404F4A02028A6C00090E401 /* Categories */,
 				B33D21B720E130D000BAD749 /* BookmarksTabViewController.swift */,
-				BBED27002292F42000788143 /* BookmarksSection.h */,
-				BBED27012292F6C000788143 /* BookmarksSection.mm */,
-				BB87BF8722FAEC82008A8A72 /* TableSectionDataSource.h */,
-				BB87BF8822FAF125008A8A72 /* TracksSection.h */,
-				BB87BF8922FAF1CA008A8A72 /* TracksSection.mm */,
-				BB87BF8B22FAF3B8008A8A72 /* InfoSection.h */,
-				BB87BF8C22FAF435008A8A72 /* InfoSection.mm */,
 				996D108924E3DBF2002DD0E2 /* BookmarksCoordinator.swift */,
 			);
 			path = Bookmarks;
@@ -5225,7 +5192,6 @@
 				6741A99F1BF340DE002C974C /* 07_roboto_medium.ttf in Resources */,
 				F6E2FE6D1E097BA00083EBEC /* _MWMOHHeaderCell.xib in Resources */,
 				F6E2FE701E097BA00083EBEC /* _MWMOHSubCell.xib in Resources */,
-				4716EAC121A6E0570029B886 /* BookmarksVC.xib in Resources */,
 				F60C8BEF1FCED15A00DCF5FB /* DiscoverySearchCell.xib in Resources */,
 				CD4A1F1C230EB43B00F2A6B6 /* CatalogConnectionErrorView.xib in Resources */,
 				F65D1E1A20E4F11600FE31DD /* ugc_migration in Resources */,
@@ -5396,7 +5362,6 @@
 				6741A9551BF340DE002C974C /* resources-xxhdpi_dark in Resources */,
 				340E1EF51E2F614400CE49BF /* SearchFilters.storyboard in Resources */,
 				B32FE74120D2844600EF7446 /* DownloadedBookmarksViewController.xib in Resources */,
-				B33D21AD20DA515800BAD749 /* MWMCategoryInfoCell.xib in Resources */,
 				340E1EF81E2F614400CE49BF /* Settings.storyboard in Resources */,
 				6741A9421BF340DE002C974C /* sound-strings in Resources */,
 				F69018BD1E9F7CB600B3C10B /* MWMAutoupdateController.xib in Resources */,
@@ -5680,7 +5645,6 @@
 				34AB667D1FC5AA330078E451 /* MWMRoutePreview.mm in Sources */,
 				993DF11B23F6BDB100AC231A /* UIViewRenderer.swift in Sources */,
 				99C964302428C27A00E41723 /* PlacePageHeaderView.swift in Sources */,
-				B33D21AC20DA515800BAD749 /* MWMCategoryInfoCell.mm in Sources */,
 				9989273A2449E60200260CE2 /* BottomMenuViewController.swift in Sources */,
 				473CBF9B2164DD470059BD54 /* SettingsTableViewSelectableProgressCell.swift in Sources */,
 				99BFEF0224B48D7600A65F5B /* SubscriptionRouter.swift in Sources */,
@@ -5702,7 +5666,6 @@
 				6741A9CF1BF340DE002C974C /* MWMLocationAlert.m in Sources */,
 				474AC76C2139E4F2002F9BF9 /* RemoveAdsViewController.swift in Sources */,
 				34ABA62D1C2D57D500FE1BEC /* MWMInputPasswordValidator.m in Sources */,
-				BBED27022292F6C000788143 /* BookmarksSection.mm in Sources */,
 				F6E2FDA11E097BA00083EBEC /* MWMEditorAdditionalNamesTableViewController.mm in Sources */,
 				999D3A67237BFA4600C5F7A8 /* SubscriptionViewBuilder.swift in Sources */,
 				4767CDA620AB1F6200BD8166 /* LeftAlignedIconButton.swift in Sources */,
@@ -5823,7 +5786,6 @@
 				33E905462180C40900868CAC /* UIViewController+Authorization.swift in Sources */,
 				CDCA2745223FCFD200167D87 /* SearchResultInfo.swift in Sources */,
 				349A13831DEC138C00C7DB60 /* MWMMobileInternetAlert.m in Sources */,
-				BB87BF8A22FAF1CA008A8A72 /* TracksSection.mm in Sources */,
 				6741A9EC1BF340DE002C974C /* MWMCircularProgress.m in Sources */,
 				478F6FA423C447E500054A53 /* ReviewView.swift in Sources */,
 				99A906EC23F6F7030005872B /* HotelDescriptionViewController.swift in Sources */,
@@ -5858,7 +5820,6 @@
 				56C74C391C74A3BC00B71B9F /* MWMInputEmailValidator.m in Sources */,
 				479603732446F17C00F3BDD0 /* User+AppleId.swift in Sources */,
 				993DF0CB23F6BD0600AC231A /* ElevationDetailsRouter.swift in Sources */,
-				6741A9F51BF340DE002C974C /* BookmarksVC.mm in Sources */,
 				47CA68FC250F99E500671019 /* BookmarksListCellStrategy.swift in Sources */,
 				B33D21B820E130D000BAD749 /* BookmarksTabViewController.swift in Sources */,
 				3358607E217632A2006D11F2 /* BookmarksSharingViewController.swift in Sources */,
@@ -5868,7 +5829,6 @@
 				993F5508237C622700545511 /* DeepLinkRouteStrategyAdapter.mm in Sources */,
 				99A906ED23F6F7030005872B /* PlacePagePreviewViewController.swift in Sources */,
 				993DF10223F6BDB100AC231A /* Colors.swift in Sources */,
-				BB87BF8D22FAF435008A8A72 /* InfoSection.mm in Sources */,
 				34AB66201FC5AA330078E451 /* RouteStartButton.swift in Sources */,
 				34F4072C1E9E1AFF00E57AC0 /* Banner.swift in Sources */,
 				99DEF9D723E420F6006BFD21 /* ElevationProfileDescriptionCell.swift in Sources */,
