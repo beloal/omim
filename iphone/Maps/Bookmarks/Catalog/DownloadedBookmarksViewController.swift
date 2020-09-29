@@ -104,7 +104,7 @@ class DownloadedBookmarksViewController: MWMViewController {
   private func openCategory(category: BookmarkGroup) {
 //    let bmViewController = BookmarksVC(category: category.categoryId)
 //    bmViewController.delegate = self
-    let bmViewController = BookmarksListBuilder.build(markGroupId: category.categoryId)
+    let bmViewController = BookmarksListBuilder.build(markGroupId: category.categoryId, bookmarksCoordinator: coordinator)
     MapViewController.topViewController().navigationController?.pushViewController(bmViewController,
                                                                                    animated: true)
   }

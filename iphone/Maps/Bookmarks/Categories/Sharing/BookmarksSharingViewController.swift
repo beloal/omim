@@ -468,7 +468,7 @@ extension BookmarksSharingViewController: UploadActionCellDelegate {
     
     Statistics.logEvent(kStatSharingOptionsClick, withParameters: [kStatItem : kStatCopyLink])
     let message = String(coreFormat: L("share_bookmarks_email_body_link"), arguments: [url.absoluteString])
-    let shareController = MWMActivityViewController.share(for: nil, message: message) {
+    let shareController = ActivityViewController.share(for: nil, message: message) {
       _, success, _, _ in
       if success {
         Statistics.logEvent(kStatSharingLinkSuccess, withParameters: [kStatFrom : kStatSharingOptions])

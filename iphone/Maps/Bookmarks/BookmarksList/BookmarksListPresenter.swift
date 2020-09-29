@@ -6,22 +6,31 @@ protocol IBookmarksListPresenter {
   func search(_ text: String)
   func sort()
   func more()
+  func deleteBookmark(in section: IBookmarksListSectionViewModel, at index: Int)
+  func viewOnMap(in section: IBookmarksListSectionViewModel, at index: Int)
+}
+
+protocol BookmarksListDelegate: AnyObject {
+  func bookmarksListDidDeleteGroup()
 }
 
 final class BookmarksListPresenter {
   private unowned let view: IBookmarksListView
   private let router: IBookmarksListRouter
   private let interactor: IBookmarksListInteractor
+  private weak var delegate: BookmarksListDelegate?
 
   private let distanceFormatter = MeasurementFormatter()
   private let imperialUnits: Bool
 
   init(view: IBookmarksListView,
        router: IBookmarksListRouter,
+       delegate: BookmarksListDelegate?,
        interactor: IBookmarksListInteractor,
        imperialUnits: Bool) {
     self.view = view
     self.router = router
+    self.delegate = delegate
     self.interactor = interactor
     self.imperialUnits = imperialUnits
 
@@ -70,19 +79,23 @@ final class BookmarksListPresenter {
         case .distance:
           return BookmarksListMenuItem(title: L("sort_distance"), action: { [weak self] in
             self?.sort(.distance)
+            Statistics.logEvent(kStatBookmarksListSort, withParameters: [kStatOption : kStatSortByDistance])
           })
         case .date:
           return BookmarksListMenuItem(title: L("sort_date"), action: { [weak self] in
             self?.sort(.date)
+            Statistics.logEvent(kStatBookmarksListSort, withParameters: [kStatOption : kStatSortByDate])
           })
         case .type:
           return BookmarksListMenuItem(title: L("sort_type"), action: { [weak self] in
             self?.sort(.type)
+            Statistics.logEvent(kStatBookmarksListSort, withParameters: [kStatOption : kStatSortByType])
           })
         }
     }
     sortItems.append(BookmarksListMenuItem(title: L("sort_default"), action: { [weak self] in
       self?.setDefaultSections()
+      Statistics.logEvent(kStatBookmarksListSort, withParameters: [kStatOption : kStatSortByDefault])
     }))
     view.showMenu(sortItems)
   }
@@ -90,25 +103,54 @@ final class BookmarksListPresenter {
   private func showMoreMenu() {
     var moreItems: [BookmarksListMenuItem] = []
     moreItems.append(BookmarksListMenuItem(title: L("sharing_options"), action: { [weak self] in
-      self?.router.sharingOptions()
+      guard let self = self else { return }
+      self.router.sharingOptions(self.interactor.getBookmarkGroup())
+      Statistics.logEvent(kStatBookmarksListItemSettings, withParameters: [kStatOption : kStatSharingOptions])
     }))
     moreItems.append(BookmarksListMenuItem(title: L("search_show_on_map"), action: { [weak self] in
       self?.viewOnMap()
+      Statistics.logEvent(kStatBookmarksListItemMoreClick, withParameters: [kStatOption : kStatViewOnMap])
     }))
     moreItems.append(BookmarksListMenuItem(title: L("list_settings"), action: { [weak self] in
-      self?.router.listSettings()
+      guard let self = self else { return }
+      self.router.listSettings(self.interactor.getBookmarkGroup(), delegate: self)
+      Statistics.logEvent(kStatBookmarksListItemMoreClick, withParameters: [kStatOption : kStatSettings])
     }))
     moreItems.append(BookmarksListMenuItem(title: L("export_file"), action: { [weak self] in
-
+      self?.interactor.exportFile { (url, status) in
+        switch status {
+        case .success:
+          guard let url = url else { fatalError() }
+          self?.view.share(url) {
+            self?.interactor.finishExportFile()
+          }
+        case .empty:
+          self?.view.showError(title: L("bookmarks_error_title_share_empty"),
+                               message: L("bookmarks_error_message_share_empty"))
+        case .error:
+          self?.view.showError(title: L("dialog_routing_system_error"),
+                               message: L("bookmarks_error_message_share_general"))
+        }
+      }
+      Statistics.logEvent(kStatBookmarksListItemMoreClick, withParameters: [kStatOption : kStatSendAsFile])
     }))
-    moreItems.append(BookmarksListMenuItem(title: L("delete_list"), destructive: true, action: { [weak self] in
+    moreItems.append(BookmarksListMenuItem(title: L("delete_list"),
+                                           destructive: true,
+                                           enabled: interactor.canDeleteGroup(),
+                                           action: { [weak self] in
+                                            self?.interactor.deleteBookmarksGroup()
+                                            self?.delegate?.bookmarksListDidDeleteGroup()
+                                            Statistics.logEvent(kStatBookmarksListItemMoreClick,
+                                                                withParameters: [kStatOption : kStatDelete])
 
-    }))
+                                           }))
     view.showMenu(moreItems)
+    Statistics.logEvent(kStatBookmarksListItemSettings, withParameters: [kStatOption : kStatMore])
   }
 
   private func viewOnMap() {
     interactor.viewOnMap()
+    router.viewOnMap(interactor.getBookmarkGroup())
   }
 
   private func sort(_ sortingType: BookmarksListSortingType) {
@@ -134,6 +176,7 @@ extension BookmarksListPresenter: IBookmarksListPresenter {
     setDefaultSections()
     view.setTitle(interactor.getTitle())
     view.setMoreItemTitle(interactor.isEditable() ? L("placepage_more_button") : L("view_on_map_bookmarks"))
+    view.enableEditing(interactor.isEditable())
   }
 
   func activateSearch() {
@@ -154,6 +197,7 @@ extension BookmarksListPresenter: IBookmarksListPresenter {
       let bookmarks = self.mapBookmarks($0)
       self.view.setSections(bookmarks.isEmpty ? [] : [BookmarksSectionViewModel(title: L("bookmarks"),
                                                                                  bookmarks: bookmarks)])
+      Statistics.logEvent(kStatBookmarksSearch, withParameters: [kStatFrom : kStatBookmarksList])
     }
   }
 
@@ -168,9 +212,61 @@ extension BookmarksListPresenter: IBookmarksListPresenter {
   func sort() {
     showSortMenu()
   }
+
+  func deleteBookmark(in section: IBookmarksListSectionViewModel, at index: Int) {
+    guard let bookmarksSection = section as? BookmarksSectionViewModel else {
+      fatalError("It's only possible to delete a bookmark")
+    }
+    guard let bookmark = bookmarksSection.bookmarks[index] as? BookmarkViewModel else { fatalError() }
+    interactor.deleteBookmark(bookmark.bookmarkId)
+    setDefaultSections()
+  }
+
+  func viewOnMap(in section: IBookmarksListSectionViewModel, at index: Int) {
+    switch section {
+    case let bookmarksSection as IBookmarksSectionViewModel:
+      let bookmark = bookmarksSection.bookmarks[index] as! BookmarkViewModel
+      interactor.viewBookmarkOnMap(bookmark.bookmarkId)
+      router.viewOnMap(interactor.getBookmarkGroup())
+      Statistics.logEvent(kStatEventName(kStatBookmarks, kStatShowOnMap))
+      if interactor.isGuide() {
+        Statistics.logEvent(kStatGuidesBookmarkSelect,
+                            withParameters: [kStatServerId : interactor.getServerId()],
+                            with: .realtime)
+      }
+    case let trackSection as ITracksSectionViewModel:
+      let track = trackSection.tracks[index] as! TrackViewModel
+      interactor.viewTrackOnMap(track.trackId)
+      router.viewOnMap(interactor.getBookmarkGroup())
+      if interactor.isGuide() {
+        Statistics.logEvent(kStatGuidesTrackSelect,
+                            withParameters: [kStatServerId : interactor.getServerId()],
+                            with: .realtime)
+      }
+    default:
+      fatalError("Wrong section type: \(section.self)")
+    }
+  }
+}
+
+extension BookmarksListPresenter: BookmarksSharingViewControllerDelegate {
+  func didShareCategory() {
+    // TODO: update description
+  }
+}
+
+extension BookmarksListPresenter: CategorySettingsViewControllerDelegate {
+  func categorySettingsController(_ viewController: CategorySettingsViewController, didEndEditing categoryId: MWMMarkGroupID) {
+    // TODO: update description
+  }
+
+  func categorySettingsController(_ viewController: CategorySettingsViewController, didDelete categoryId: MWMMarkGroupID) {
+    delegate?.bookmarksListDidDeleteGroup()
+  }
 }
 
 fileprivate struct BookmarkViewModel: IBookmarkViewModel {
+  let bookmarkId: MWMMarkID
   let bookmarkName: String
   let subtitle: String
   var image: UIImage {
@@ -181,6 +277,7 @@ fileprivate struct BookmarkViewModel: IBookmarkViewModel {
   private let bookmarkIconName: String
 
   init(_ bookmark: Bookmark, formattedDistance: String?) {
+    bookmarkId = bookmark.bookmarkId
     bookmarkName = bookmark.bookmarkName
     bookmarkColor = bookmark.bookmarkColor
     bookmarkIconName = bookmark.bookmarkIconName
@@ -189,6 +286,7 @@ fileprivate struct BookmarkViewModel: IBookmarkViewModel {
 }
 
 fileprivate struct TrackViewModel: ITrackViewModel {
+  let trackId: MWMTrackID
   let trackName: String
   let subtitle: String
   var image: UIImage {
@@ -198,6 +296,7 @@ fileprivate struct TrackViewModel: ITrackViewModel {
   private let trackColor: UIColor
 
   init(_ track: Track, formattedDistance: String) {
+    trackId = track.trackId
     trackName = track.trackName
     subtitle = "\(L("length")) \(formattedDistance)"
     trackColor = track.trackColor
@@ -225,11 +324,13 @@ fileprivate struct TracksSectionViewModel: ITracksSectionViewModel {
 fileprivate struct BookmarksListMenuItem: IBookmarksListMenuItem {
   let title: String
   let destructive: Bool
+  let enabled: Bool
   let action: () -> Void
 
-  init(title: String, destructive: Bool = false, action: @escaping () -> Void) {
+  init(title: String, destructive: Bool = false, enabled: Bool = true, action: @escaping () -> Void) {
     self.title = title
     self.destructive = destructive
+    self.enabled = enabled
     self.action = action
   }
 }

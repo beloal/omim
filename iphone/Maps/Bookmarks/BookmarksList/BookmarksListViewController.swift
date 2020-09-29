@@ -2,6 +2,7 @@ protocol IBookmarksListSectionViewModel {
   var numberOfItems: Int { get }
   var sectionTitle: String { get }
   var hasVisibilityButton: Bool { get }
+  var canEdit: Bool { get }
 }
 
 protocol IBookmarksSectionViewModel: IBookmarksListSectionViewModel {
@@ -11,6 +12,7 @@ protocol IBookmarksSectionViewModel: IBookmarksListSectionViewModel {
 extension IBookmarksSectionViewModel {
   var numberOfItems: Int { bookmarks.count }
   var hasVisibilityButton: Bool { false }
+  var canEdit: Bool { true }
 }
 
 protocol ITracksSectionViewModel: IBookmarksListSectionViewModel {
@@ -21,6 +23,7 @@ extension ITracksSectionViewModel {
   var numberOfItems: Int { tracks.count }
   var sectionTitle: String { L("tracks_title") }
   var hasVisibilityButton: Bool { false }
+  var canEdit: Bool { true }
 }
 
 protocol IBookmarkViewModel {
@@ -38,6 +41,7 @@ protocol ITrackViewModel {
 protocol IBookmarksListMenuItem {
   var title: String { get }
   var destructive: Bool { get }
+  var enabled: Bool { get }
   var action: () -> Void { get }
 }
 
@@ -46,14 +50,18 @@ protocol IBookmarksListView: AnyObject {
   func setSections(_ sections: [IBookmarksListSectionViewModel])
   func setMoreItemTitle(_ itemTitle: String)
   func showMenu(_ items: [IBookmarksListMenuItem])
+  func enableEditing(_ enable: Bool)
+  func share(_ url: URL, completion: @escaping () -> Void)
+  func showError(title: String, message: String)
 }
 
 final class BookmarksListViewController: MWMViewController {
   var presenter: IBookmarksListPresenter!
 
   private var sections: [IBookmarksListSectionViewModel]?
-
   private let cellStrategy = BookmarksListCellStrategy()
+
+  private var canEdit = false
 
   @IBOutlet var tableView: UITableView!
   @IBOutlet var searchBar: UISearchBar!
@@ -82,6 +90,11 @@ final class BookmarksListViewController: MWMViewController {
   @IBAction func onMoreItem(_ sender: UIBarButtonItem) {
     presenter.more()
   }
+
+  override func setEditing(_ editing: Bool, animated: Bool) {
+    super.setEditing(editing, animated: animated)
+    tableView.setEditing(editing, animated: animated)
+  }
 }
 
 extension BookmarksListViewController: UITableViewDataSource {
@@ -108,6 +121,36 @@ extension BookmarksListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     guard let section = sections?[section] else { fatalError() }
     return cellStrategy.headerView(tableView, for: section)
+  }
+
+  func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+    return indexPath
+  }
+
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+    guard let section = sections?[indexPath.section] else { fatalError() }
+    presenter.viewOnMap(in: section, at: indexPath.row)
+  }
+
+  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    guard let section = sections?[indexPath.section] else { fatalError() }
+    return canEdit && section.canEdit
+  }
+
+  func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+    isEditing = true
+  }
+
+  func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+    isEditing = false
+  }
+
+  func tableView(_ tableView: UITableView,
+                 commit editingStyle: UITableViewCell.EditingStyle,
+                 forRowAt indexPath: IndexPath) {
+    guard let section = sections?[indexPath.section] else { fatalError() }
+    presenter.deleteBookmark(in: section, at: indexPath.row)
   }
 }
 
@@ -160,9 +203,28 @@ extension BookmarksListViewController: IBookmarksListView {
       let action = UIAlertAction(title: item.title, style: item.destructive ? .destructive : .default) { _ in
         item.action()
       }
+      action.isEnabled = item.enabled
       actionSheet.addAction(action)
     }
     actionSheet.addAction(UIAlertAction(title: L("cancel"), style: .cancel, handler: nil))
+    actionSheet.popoverPresentationController?.barButtonItem = sortToolbarItem
     present(actionSheet, animated: true)
+  }
+
+  func enableEditing(_ enable: Bool) {
+    canEdit = enable
+    navigationItem.rightBarButtonItem = enable ? editButtonItem : nil
+  }
+
+  func share(_ url: URL, completion: @escaping () -> Void) {
+    let shareController = ActivityViewController.share(for: url,
+                                                       message: L("share_bookmarks_email_body")) { (_, _, _, _) in
+      completion()
+    }
+    shareController?.present(inParentViewController: self, anchorView: self.view)
+  }
+
+  func showError(title: String, message: String) {
+    MWMAlertViewController.activeAlert().presentInfoAlert(title, text: message)
   }
 }

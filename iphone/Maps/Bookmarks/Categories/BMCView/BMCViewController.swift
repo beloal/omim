@@ -85,7 +85,7 @@ final class BMCViewController: MWMViewController {
     viewModel.shareCategoryFile(at: index) {
       switch $0 {
       case let .success(url):
-        let shareController = MWMActivityViewController.share(for: url,
+        let shareController = ActivityViewController.share(for: url,
                                                               message: L("share_bookmarks_email_body"))
         { [weak self] _, _, _, _ in
           self?.viewModel?.finishShareCategory()
@@ -117,7 +117,9 @@ final class BMCViewController: MWMViewController {
   private func openCategory(category: BookmarkGroup) {
 //    let bmViewController = BookmarksVC(category: category.categoryId)
 //    bmViewController.delegate = self
-    let bmViewController = BookmarksListBuilder.build(markGroupId: category.categoryId)
+    let bmViewController = BookmarksListBuilder.build(markGroupId: category.categoryId,
+                                                      bookmarksCoordinator: coordinator,
+                                                      delegate: self)
     MapViewController.topViewController().navigationController?.pushViewController(bmViewController,
                                                                                    animated: true)
   }
@@ -380,6 +382,13 @@ extension BMCViewController: CategorySettingsViewControllerDelegate {
   func categorySettingsController(_ viewController: CategorySettingsViewController,
                                   didDelete categoryId: MWMMarkGroupID) {
     navigationController?.popViewController(animated: true)
+  }
+}
+
+extension BMCViewController: BookmarksListDelegate {
+  func bookmarksListDidDeleteGroup() {
+    guard let parentVC = parent else { return }
+    navigationController?.popToViewController(parentVC, animated: true)
   }
 }
 
