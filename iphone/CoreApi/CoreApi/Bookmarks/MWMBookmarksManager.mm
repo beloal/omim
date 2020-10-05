@@ -78,7 +78,7 @@ static MWMBookmarksSortingType convertSortingType(BookmarkManager::SortingType c
   }
 }
 
-static BookmarkManager::SortingType converSortingTypeToCore(MWMBookmarksSortingType sortingType) {
+static BookmarkManager::SortingType convertSortingTypeToCore(MWMBookmarksSortingType sortingType) {
   switch (sortingType) {
     case MWMBookmarksSortingTypeByType:
       return BookmarkManager::SortingType::ByType;
@@ -458,7 +458,7 @@ static BookmarkManager::SortingType converSortingTypeToCore(MWMBookmarksSortingT
           sortingType:(MWMBookmarksSortingType)sortingType
              location:(CLLocation *)location
            completion:(SortBookmarksCompletionBlock)completion {
-  self.bm.SetLastSortingType(groupId, converSortingTypeToCore(sortingType));
+  self.bm.SetLastSortingType(groupId, convertSortingTypeToCore(sortingType));
   m2::PointD myPosition = m2::PointD::Zero();
 
   if (sortingType == MWMBookmarksSortingTypeByDistance) {
@@ -472,10 +472,9 @@ static BookmarkManager::SortingType converSortingTypeToCore(MWMBookmarksSortingT
   auto const sortId = ++self.lastSortId;
   __weak auto weakSelf = self;
 
-  auto &bm = GetFramework().GetBookmarkManager();
   BookmarkManager::SortParams sortParams;
   sortParams.m_groupId = groupId;
-  sortParams.m_sortingType = converSortingTypeToCore(sortingType);
+  sortParams.m_sortingType = convertSortingTypeToCore(sortingType);
   sortParams.m_hasMyPosition = location != nil;
   sortParams.m_myPosition = myPosition;
   sortParams.m_onResults = [weakSelf, sortId, completion] (BookmarkManager::SortedBlocksCollection &&sortedBlocks,
@@ -484,33 +483,54 @@ static BookmarkManager::SortingType converSortingTypeToCore(MWMBookmarksSortingT
     if (!self || sortId != self.lastSortId)
       return;
 
-    if (status == BookmarkManager::SortParams::Status::Completed) {
-      NSMutableArray *result = [NSMutableArray array];
-      for (auto const &sortedBlock : sortedBlocks) {
-        NSMutableArray *bookmarks = nil;
-        if (sortedBlock.m_markIds.size() > 0) {
-          bookmarks = [NSMutableArray array];
-          for (auto const &markId : sortedBlock.m_markIds) {
-            [bookmarks addObject:[[MWMBookmark alloc] initWithMarkId:markId
-                                                        bookmarkData:self.bm.GetBookmark(markId)]];
+    switch (status) {
+      case BookmarkManager::SortParams::Status::Completed: {
+        NSMutableArray *result = [NSMutableArray array];
+        for (auto const &sortedBlock : sortedBlocks) {
+          NSMutableArray *bookmarks = nil;
+          if (sortedBlock.m_markIds.size() > 0) {
+            bookmarks = [NSMutableArray array];
+            for (auto const &markId : sortedBlock.m_markIds) {
+              [bookmarks addObject:[[MWMBookmark alloc] initWithMarkId:markId
+                                                          bookmarkData:self.bm.GetBookmark(markId)]];
+            }
           }
-        }
-        NSMutableArray *tracks = nil;
-        if (sortedBlock.m_trackIds.size() > 0) {
-          tracks = [NSMutableArray array];
-          for (auto const &trackId : sortedBlock.m_trackIds) {
-            [tracks addObject:[[MWMTrack alloc] initWithTrackId:trackId trackData:self.bm.GetTrack(trackId)]];
+          NSMutableArray *tracks = nil;
+          if (sortedBlock.m_trackIds.size() > 0) {
+            tracks = [NSMutableArray array];
+            for (auto const &trackId : sortedBlock.m_trackIds) {
+              [tracks addObject:[[MWMTrack alloc] initWithTrackId:trackId trackData:self.bm.GetTrack(trackId)]];
+            }
           }
+          [result addObject:[[MWMBookmarksSection alloc] initWithTitle:@(sortedBlock.m_blockName.c_str())
+                                                             bookmarks:bookmarks
+                                                                tracks:tracks]];
         }
-        [result addObject:[[MWMBookmarksSection alloc] initWithTitle:@(sortedBlock.m_blockName.c_str())
-                                                           bookmarks:bookmarks
-                                                              tracks:tracks]];
+        completion([result copy]);
+        break;
       }
-      completion([result copy]);
+      case BookmarkManager::SortParams::Status::Cancelled:
+        completion(nil);
+        break;
     }
   };
 
-  bm.GetSortedCategory(sortParams);
+  self.bm.GetSortedCategory(sortParams);
+}
+
+- (BOOL)hasLastSortingType:(MWMMarkGroupID)groupId {
+  BookmarkManager::SortingType st;
+  return self.bm.GetLastSortingType(groupId, st);
+}
+
+- (MWMBookmarksSortingType)lastSortingType:(MWMMarkGroupID)groupId {
+  BookmarkManager::SortingType st;
+  self.bm.GetLastSortingType(groupId, st);
+  return convertSortingType(st);
+}
+
+- (void)resetLastSortingType:(MWMMarkGroupID)groupId {
+  self.bm.ResetLastSortingType(groupId);
 }
 
 #pragma mark - Bookmarks

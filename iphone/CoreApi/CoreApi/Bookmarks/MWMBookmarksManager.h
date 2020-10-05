@@ -66,6 +66,9 @@ NS_SWIFT_NAME(BookmarksManager)
           sortingType:(MWMBookmarksSortingType)sortingType
              location:(CLLocation * _Nullable)location
            completion:(SortBookmarksCompletionBlock)completionBlock;
+- (BOOL)hasLastSortingType:(MWMMarkGroupID)groupId;
+- (MWMBookmarksSortingType)lastSortingType:(MWMMarkGroupID)groupId;
+- (void)resetLastSortingType:(MWMMarkGroupID)groupId;
 
 - (NSArray<MWMCarPlayBookmarkObject *> *)bookmarksForCategory:(MWMMarkGroupID)categoryId;
 - (MWMMarkIDCollection)bookmarkIdsForCategory:(MWMMarkGroupID)categoryId;

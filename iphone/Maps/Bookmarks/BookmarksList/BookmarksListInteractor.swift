@@ -15,6 +15,7 @@ protocol IBookmarksListInteractor {
   func sort(_ sortingType: BookmarksListSortingType,
             location: CLLocation?,
             completion: @escaping ([BookmarksSection]) -> Void)
+  func lastSortingType() -> BookmarksListSortingType?
   func deleteBookmark(_ bookmarkId: MWMMarkID)
   func deleteBookmarksGroup()
   func canDeleteGroup() -> Bool
@@ -26,6 +27,21 @@ enum BookmarksListSortingType {
   case distance
   case date
   case type
+}
+
+extension BookmarksListSortingType {
+  init(_ sortingType: BookmarksSortingType) {
+    switch sortingType {
+    case .byType:
+      self = .type
+    case .byDistance:
+      self = .distance
+    case .byTime:
+      self = .date
+    @unknown default:
+      fatalError()
+    }
+  }
 }
 
 enum ExportFileStatus {
@@ -77,7 +93,8 @@ extension BookmarksListInteractor: IBookmarksListInteractor {
   }
   
   func getBookmarks() -> [Bookmark] {
-    bookmarksManager.bookmarks(forGroup: markGroupId)
+    bookmarksManager.resetLastSortingType(markGroupId)
+    return bookmarksManager.bookmarks(forGroup: markGroupId)
   }
 
   func getTracks() -> [Track] {
@@ -135,9 +152,6 @@ extension BookmarksListInteractor: IBookmarksListInteractor {
     FrameworkHelper.showTrack(trackId)
   }
 
-  func viewOnMap(_ bookmarkId: MWMMarkID) {
-  }
-
   func sort(_ sortingType: BookmarksListSortingType,
             location: CLLocation?,
             completion: @escaping ([BookmarksSection]) -> Void) {
@@ -157,6 +171,13 @@ extension BookmarksListInteractor: IBookmarksListInteractor {
       guard let sections = sections else { return }
       completion(sections)
     }
+  }
+
+  func lastSortingType() -> BookmarksListSortingType? {
+    guard bookmarksManager.hasLastSortingType(markGroupId) else {
+      return nil
+    }
+    return BookmarksListSortingType(bookmarksManager.lastSortingType(markGroupId))
   }
 
   func deleteBookmark(_ bookmarkId: MWMMarkID) {

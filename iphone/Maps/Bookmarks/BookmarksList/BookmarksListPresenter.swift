@@ -37,6 +37,14 @@ final class BookmarksListPresenter {
     distanceFormatter.unitOptions = [.providedUnit]
   }
 
+  private func reload() {
+    guard let sortingType = interactor.lastSortingType() else {
+      setDefaultSections()
+      return
+    }
+    sort(sortingType)
+  }
+
   private func setDefaultSections() {
     var sections: [IBookmarksListSectionViewModel] = []
     let tracks = interactor.getTracks().map { track in
@@ -46,7 +54,9 @@ final class BookmarksListPresenter {
       sections.append(TracksSectionViewModel(tracks: tracks))
     }
     let bookmarks = mapBookmarks(interactor.getBookmarks())
-    sections.append(BookmarksSectionViewModel(title: L("bookmarks"), bookmarks: bookmarks))
+    if !bookmarks.isEmpty {
+      sections.append(BookmarksSectionViewModel(title: L("bookmarks"), bookmarks: bookmarks))
+    }
     view.setSections(sections)
   }
 
@@ -173,7 +183,7 @@ final class BookmarksListPresenter {
 
 extension BookmarksListPresenter: IBookmarksListPresenter {
   func viewDidLoad() {
-    setDefaultSections()
+    reload()
     view.setTitle(interactor.getTitle())
     view.setMoreItemTitle(interactor.isEditable() ? L("placepage_more_button") : L("view_on_map_bookmarks"))
     view.enableEditing(interactor.isEditable())
@@ -188,7 +198,7 @@ extension BookmarksListPresenter: IBookmarksListPresenter {
   }
 
   func cancelSearch() {
-    setDefaultSections()
+    reload()
   }
 
   func search(_ text: String) {
@@ -219,7 +229,7 @@ extension BookmarksListPresenter: IBookmarksListPresenter {
     }
     guard let bookmark = bookmarksSection.bookmarks[index] as? BookmarkViewModel else { fatalError() }
     interactor.deleteBookmark(bookmark.bookmarkId)
-    setDefaultSections()
+    reload()
   }
 
   func viewOnMap(in section: IBookmarksListSectionViewModel, at index: Int) {
