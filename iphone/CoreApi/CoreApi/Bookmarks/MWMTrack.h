@@ -9,7 +9,7 @@ NS_SWIFT_NAME(Track)
 
 @property(nonatomic, readonly) MWMTrackID trackId;
 @property(nonatomic, readonly) NSString *trackName;
-@property(nonatomic, readonly) NSInteger trackLength;
+@property(nonatomic, readonly) NSInteger trackLengthMeters;
 @property(nonatomic, readonly) UIColor *trackColor;
 
 @end

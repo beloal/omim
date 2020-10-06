@@ -1,11 +1,5 @@
 protocol IBookmarksListInteractor {
   func getBookmarkGroup() -> BookmarkGroup
-  func getTitle() -> String
-  func getBookmarks() -> [Bookmark]
-  func getTracks() -> [Track]
-  func getServerId() -> String
-  func isEditable() -> Bool
-  func isGuide() -> Bool
   func prepareForSearch()
   func search(_ text: String, completion: @escaping ([Bookmark]) -> Void)
   func availableSortingTypes(hasMyPosition: Bool) -> [BookmarksListSortingType]
@@ -15,6 +9,7 @@ protocol IBookmarksListInteractor {
   func sort(_ sortingType: BookmarksListSortingType,
             location: CLLocation?,
             completion: @escaping ([BookmarksSection]) -> Void)
+  func resetSort()
   func lastSortingType() -> BookmarksListSortingType?
   func deleteBookmark(_ bookmarkId: MWMMarkID)
   func deleteBookmarksGroup()
@@ -88,31 +83,6 @@ extension BookmarksListInteractor: IBookmarksListInteractor {
     bookmarksManager.category(withId: markGroupId)
   }
 
-  func getTitle() -> String {
-    bookmarksManager.getCategoryName(markGroupId)
-  }
-  
-  func getBookmarks() -> [Bookmark] {
-    bookmarksManager.resetLastSortingType(markGroupId)
-    return bookmarksManager.bookmarks(forGroup: markGroupId)
-  }
-
-  func getTracks() -> [Track] {
-    bookmarksManager.tracks(forGroup: markGroupId)
-  }
-
-  func getServerId() -> String {
-    bookmarksManager.getServerId(markGroupId)
-  }
-
-  func isEditable() -> Bool {
-    bookmarksManager.isCategoryEditable(markGroupId)
-  }
-
-  func isGuide() -> Bool {
-    bookmarksManager.isGuide(markGroupId)
-  }
-
   func prepareForSearch() {
     bookmarksManager.prepare(forSearch: markGroupId)
   }
@@ -171,6 +141,10 @@ extension BookmarksListInteractor: IBookmarksListInteractor {
       guard let sections = sections else { return }
       completion(sections)
     }
+  }
+
+  func resetSort() {
+    bookmarksManager.resetLastSortingType(markGroupId)
   }
 
   func lastSortingType() -> BookmarksListSortingType? {

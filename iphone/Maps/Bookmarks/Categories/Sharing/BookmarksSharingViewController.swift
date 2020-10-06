@@ -506,14 +506,14 @@ extension BookmarksSharingViewController: EditOnWebViewControllerDelegate {
 
 extension BookmarksSharingViewController: GuideSharingNameViewControllerDelegate {
   func viewController(_ viewController: GuideSharingNameViewController, didFinishEditing text: String) {
-    category.title = text
+    manager.setCategory(category.categoryId, name: text)
     showEditDescr()
   }
 }
 
 extension BookmarksSharingViewController: GuideSharingDescriptionViewControllerDelegate {
   func viewController(_ viewController: GuideSharingDescriptionViewController, didFinishEditing text: String) {
-    category.detailedAnnotation = text
+    manager.setCategory(category.categoryId, description: text)
     showSelectProperties()
   }
 }

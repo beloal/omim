@@ -396,6 +396,11 @@ static BookmarkManager::SortingType convertSortingTypeToCore(MWMBookmarksSorting
   return [[NSURL alloc] initWithString:@(self.bm.GetCategoryData(groupId).m_imageUrl.c_str())];
 }
 
+- (NSString *)getCategoryAuthorId:(MWMMarkGroupID)groupId
+{
+  return @(self.bm.GetCategoryData(groupId).m_authorId.c_str());
+}
+
 - (MWMMarkGroupID)createCategoryWithName:(NSString *)name
 {
   auto groupId = self.bm.CreateBookmarkCategory(name.UTF8String);

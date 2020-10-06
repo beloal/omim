@@ -22,6 +22,7 @@ final class BookmarksListPresenter {
 
   private let distanceFormatter = MeasurementFormatter()
   private let imperialUnits: Bool
+  private let bookmarkGroup: BookmarkGroup
 
   init(view: IBookmarksListView,
        router: IBookmarksListRouter,
@@ -34,6 +35,7 @@ final class BookmarksListPresenter {
     self.interactor = interactor
     self.imperialUnits = imperialUnits
 
+    bookmarkGroup = interactor.getBookmarkGroup()
     distanceFormatter.unitOptions = [.providedUnit]
   }
 
@@ -46,14 +48,15 @@ final class BookmarksListPresenter {
   }
 
   private func setDefaultSections() {
+    interactor.resetSort()
     var sections: [IBookmarksListSectionViewModel] = []
-    let tracks = interactor.getTracks().map { track in
-      TrackViewModel(track, formattedDistance: formatDistance(Double(track.trackLength)))
+    let tracks = bookmarkGroup.tracks.map { track in
+      TrackViewModel(track, formattedDistance: formatDistance(Double(track.trackLengthMeters)))
     }
     if !tracks.isEmpty {
       sections.append(TracksSectionViewModel(tracks: tracks))
     }
-    let bookmarks = mapBookmarks(interactor.getBookmarks())
+    let bookmarks = mapBookmarks(bookmarkGroup.bookmarks)
     if !bookmarks.isEmpty {
       sections.append(BookmarksSectionViewModel(title: L("bookmarks"), bookmarks: bookmarks))
     }
@@ -114,7 +117,7 @@ final class BookmarksListPresenter {
     var moreItems: [BookmarksListMenuItem] = []
     moreItems.append(BookmarksListMenuItem(title: L("sharing_options"), action: { [weak self] in
       guard let self = self else { return }
-      self.router.sharingOptions(self.interactor.getBookmarkGroup())
+      self.router.sharingOptions(self.bookmarkGroup)
       Statistics.logEvent(kStatBookmarksListItemSettings, withParameters: [kStatOption : kStatSharingOptions])
     }))
     moreItems.append(BookmarksListMenuItem(title: L("search_show_on_map"), action: { [weak self] in
@@ -123,7 +126,7 @@ final class BookmarksListPresenter {
     }))
     moreItems.append(BookmarksListMenuItem(title: L("list_settings"), action: { [weak self] in
       guard let self = self else { return }
-      self.router.listSettings(self.interactor.getBookmarkGroup(), delegate: self)
+      self.router.listSettings(self.bookmarkGroup, delegate: self)
       Statistics.logEvent(kStatBookmarksListItemMoreClick, withParameters: [kStatOption : kStatSettings])
     }))
     moreItems.append(BookmarksListMenuItem(title: L("export_file"), action: { [weak self] in
@@ -160,7 +163,7 @@ final class BookmarksListPresenter {
 
   private func viewOnMap() {
     interactor.viewOnMap()
-    router.viewOnMap(interactor.getBookmarkGroup())
+    router.viewOnMap(bookmarkGroup)
   }
 
   private func sort(_ sortingType: BookmarksListSortingType) {
@@ -171,7 +174,7 @@ final class BookmarksListPresenter {
         }
         if let tracks = bookmarksSection.tracks, let self = self {
           return TracksSectionViewModel(tracks: tracks.map { track in
-            TrackViewModel(track, formattedDistance: self.formatDistance(Double(track.trackLength)))
+            TrackViewModel(track, formattedDistance: self.formatDistance(Double(track.trackLengthMeters)))
           })
         }
         fatalError()
@@ -184,9 +187,9 @@ final class BookmarksListPresenter {
 extension BookmarksListPresenter: IBookmarksListPresenter {
   func viewDidLoad() {
     reload()
-    view.setTitle(interactor.getTitle())
-    view.setMoreItemTitle(interactor.isEditable() ? L("placepage_more_button") : L("view_on_map_bookmarks"))
-    view.enableEditing(interactor.isEditable())
+    view.setTitle(bookmarkGroup.title)
+    view.setMoreItemTitle(bookmarkGroup.isEditable ? L("placepage_more_button") : L("view_on_map_bookmarks"))
+    view.enableEditing(bookmarkGroup.isEditable)
   }
 
   func activateSearch() {
@@ -212,7 +215,7 @@ extension BookmarksListPresenter: IBookmarksListPresenter {
   }
 
   func more() {
-    if interactor.isEditable() {
+    if bookmarkGroup.isEditable {
       showMoreMenu()
     } else {
       viewOnMap()
@@ -237,20 +240,20 @@ extension BookmarksListPresenter: IBookmarksListPresenter {
     case let bookmarksSection as IBookmarksSectionViewModel:
       let bookmark = bookmarksSection.bookmarks[index] as! BookmarkViewModel
       interactor.viewBookmarkOnMap(bookmark.bookmarkId)
-      router.viewOnMap(interactor.getBookmarkGroup())
+      router.viewOnMap(bookmarkGroup)
       Statistics.logEvent(kStatEventName(kStatBookmarks, kStatShowOnMap))
-      if interactor.isGuide() {
+      if bookmarkGroup.isGuide {
         Statistics.logEvent(kStatGuidesBookmarkSelect,
-                            withParameters: [kStatServerId : interactor.getServerId()],
+                            withParameters: [kStatServerId : bookmarkGroup.serverId],
                             with: .realtime)
       }
     case let trackSection as ITracksSectionViewModel:
       let track = trackSection.tracks[index] as! TrackViewModel
       interactor.viewTrackOnMap(track.trackId)
-      router.viewOnMap(interactor.getBookmarkGroup())
-      if interactor.isGuide() {
+      router.viewOnMap(bookmarkGroup)
+      if bookmarkGroup.isGuide {
         Statistics.logEvent(kStatGuidesTrackSelect,
-                            withParameters: [kStatServerId : interactor.getServerId()],
+                            withParameters: [kStatServerId : bookmarkGroup.serverId],
                             with: .realtime)
       }
     default:

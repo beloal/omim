@@ -124,7 +124,7 @@ final class BMCViewController: MWMViewController {
 
   private func setCategoryVisible(_ visible: Bool, at index: Int) {
     let category = viewModel.category(at: index)
-    category.isVisible = visible
+    BookmarksManager.shared().setCategory(category.categoryId, isVisible: visible)
     if let categoriesHeader = tableView.headerView(forSection: viewModel.sectionIndex(section: .categories)) as? BMCCategoriesHeader {
       categoriesHeader.isShowAll = viewModel.areAllCategoriesHidden()
     }
